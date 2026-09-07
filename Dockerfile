@@ -9,7 +9,7 @@ RUN apt-get update \
 
 RUN npm install --global pnpm@10.29.1
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
