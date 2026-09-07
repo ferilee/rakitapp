@@ -16,6 +16,9 @@ COPY . .
 RUN pnpm build
 RUN pnpm prune --prod
 
+# Fail the image build if a native SQLite binding was not produced.
+RUN node -e "const Database = require('./.output/server/node_modules/better-sqlite3'); const db = new Database(':memory:'); db.close(); console.log('better-sqlite3 runtime binding OK')"
+
 FROM node:22-bookworm-slim AS runtime
 
 WORKDIR /app
