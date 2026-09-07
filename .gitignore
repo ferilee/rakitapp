@@ -1,0 +1,23 @@
+build
+.output/
+
+.generated/
+
+# Stray SQLite files at the template root (real DB lives under data/)
+/app.db
+/app.db-shm
+/app.db-wal
+/local.db
+
+.vercel/
+
+# Local dependencies and runtime secrets
+node_modules/
+.env
+.env.*.local
+.DS_Store
+
+# Local RakitApp data and generated deployment files
+data/*.db
+data/*.db-*
+.deploy-tmp/

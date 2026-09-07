@@ -1,0 +1,43 @@
+name: RakitApp backend tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "actions/**"
+      - "server/**"
+      - "shared/**"
+      - "package.json"
+      - "vitest.config.ts"
+      - ".github/workflows/rakitapp-backend-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "actions/**"
+      - "server/**"
+      - "shared/**"
+      - "package.json"
+      - "vitest.config.ts"
+      - ".github/workflows/rakitapp-backend-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: RakitApp backend unit and contract tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - name: Run RakitApp backend tests
+        run: pnpm test:backend
+      - name: Typecheck RakitApp
+        run: pnpm typecheck

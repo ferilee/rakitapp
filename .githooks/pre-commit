@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+changed_files="$(git diff --cached --name-only)"
+
+if printf '%s\n' "$changed_files" | rg -q '^(actions/|server/|shared/|package\.json|vitest\.config\.ts|\.github/workflows/rakitapp-backend-tests\.yml)'; then
+  pnpm test:backend
+fi

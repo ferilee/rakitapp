@@ -1,0 +1,26 @@
+{
+  "name": "RakitApp",
+  "short_name": "RakitApp",
+  "id": "/",
+  "description": "RakitApp membantu mengubah ide menjadi brief proyek dan aplikasi yang siap dirakit.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#081224",
+  "theme_color": "#18181B",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
