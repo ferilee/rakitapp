@@ -3,7 +3,7 @@ services:
     image: ghcr.io/ferilee/rakitapp:latest
     container_name: rakitapp
     ports:
-      - "2005:2005"
+      - "2015:2005"
     env_file:
       - .env
     environment:
