@@ -77,6 +77,93 @@ const IDEA_EXAMPLES = [
   },
 ];
 
+const PROBLEM_PATHS = [
+  {
+    id: "learning",
+    label: "Pembelajaran",
+    description: "Materi, aktivitas belajar, dan kemajuan siswa.",
+    recommendation: {
+      name: "Kelas Digital",
+      categoryId: "lms" as const,
+      audience: ["teacher", "student"] as AudienceId[],
+      featureIds: ["learning-materials", "quiz-engine", "teacher-dashboard"],
+      idea: "Saya ingin siswa bisa belajar dari HP dengan materi, kuis, dan kemajuan yang mudah dipantau.",
+      explanation:
+        "RakitApp menyarankan ruang kelas digital sederhana untuk membagikan materi, memberi kuis, dan melihat kemajuan siswa.",
+    },
+  },
+  {
+    id: "assessment",
+    label: "Asesmen",
+    description: "Soal, ujian, penilaian, dan hasil belajar.",
+    recommendation: {
+      name: "Kuis & Asesmen",
+      categoryId: "assessment" as const,
+      audience: ["teacher", "student"] as AudienceId[],
+      featureIds: ["question-bank", "quiz-engine", "leaderboard"],
+      idea: "Saya ingin siswa mengerjakan soal dari HP dan nilainya langsung masuk ke rekap guru.",
+      explanation:
+        "RakitApp menyarankan aplikasi kuis dengan bank soal, penilaian otomatis, dan hasil yang mudah dibaca.",
+    },
+  },
+  {
+    id: "administration",
+    label: "Administrasi",
+    description: "Pencatatan, rekap, laporan, dan pekerjaan rutin sekolah.",
+    recommendation: {
+      name: "Administrasi Sekolah",
+      categoryId: "school-operations" as const,
+      audience: ["teacher", "admin"] as AudienceId[],
+      featureIds: ["auth-roles", "reports-export", "notifications"],
+      idea: "Saya ingin pekerjaan administrasi sekolah lebih rapi dan laporan bisa dibuat tanpa menghitung ulang.",
+      explanation:
+        "RakitApp menyarankan ruang administrasi dengan akses sesuai peran, rekap, laporan, dan notifikasi.",
+    },
+  },
+  {
+    id: "attendance",
+    label: "Presensi",
+    description: "Kehadiran siswa, rekap kelas, dan laporan.",
+    recommendation: {
+      name: "Presensi Sekolah",
+      categoryId: "school-operations" as const,
+      audience: ["teacher", "admin"] as AudienceId[],
+      featureIds: ["auth-roles", "attendance", "reports-export"],
+      idea: "Saya ingin guru mencatat kehadiran siswa dari HP dan rekapnya langsung terlihat.",
+      explanation:
+        "RakitApp menyarankan aplikasi presensi dengan rekap per kelas dan laporan kehadiran.",
+    },
+  },
+  {
+    id: "portfolio",
+    label: "Portofolio",
+    description: "Karya, pengalaman, sertifikat, dan profil profesional.",
+    recommendation: {
+      name: "PortofolioKu",
+      categoryId: "personal-web" as const,
+      audience: ["teacher"] as AudienceId[],
+      featureIds: ["personal-profile", "portfolio-gallery", "contact-links"],
+      idea: "Saya ingin memiliki website portofolio untuk menampilkan karya, pengalaman, dan kontak saya.",
+      explanation:
+        "RakitApp menyarankan website portofolio pribadi yang ringan dan mudah dibagikan.",
+    },
+  },
+  {
+    id: "school-website",
+    label: "Website Sekolah",
+    description: "Profil sekolah, informasi layanan, dan pengumuman.",
+    recommendation: {
+      name: "Website Profil Sekolah",
+      categoryId: "school-operations" as const,
+      audience: ["admin", "parent"] as AudienceId[],
+      featureIds: ["auth-roles", "notifications", "reports-export"],
+      idea: "Saya ingin sekolah memiliki website yang menampilkan profil, layanan, informasi, dan pengumuman.",
+      explanation:
+        "RakitApp menyarankan website profil sekolah dengan halaman informasi yang mudah diperbarui oleh admin.",
+    },
+  },
+] as const;
+
 function formatCurrency(value: number) {
   return `Rp ${value.toLocaleString("id-ID")}`;
 }
@@ -95,6 +182,12 @@ function newIntake(): ProjectIntake {
 
 export function BuilderPage() {
   const [step, setStep] = useState(0);
+  const [ideaPath, setIdeaPath] = useState<"choose" | "idea" | "problem">(
+    "choose",
+  );
+  const [selectedProblemId, setSelectedProblemId] = useState<string | null>(
+    null,
+  );
   const [intake, setIntake] = useState<ProjectIntake>(newIntake);
   const [brief, setBrief] = useState<ProjectBrief | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -143,6 +236,28 @@ export function BuilderPage() {
     });
   }
 
+  function chooseProblem(problem: (typeof PROBLEM_PATHS)[number]) {
+    setIdeaPath("problem");
+    setSelectedProblemId(problem.id);
+    updateIntake({
+      idea: problem.recommendation.idea,
+      categoryId: problem.recommendation.categoryId,
+      audience: problem.recommendation.audience,
+      featureIds: [...problem.recommendation.featureIds],
+    });
+  }
+
+  function chooseIdeaPath() {
+    setIdeaPath("idea");
+    setSelectedProblemId(null);
+    updateIntake({
+      idea: "",
+      categoryId: "lms",
+      audience: ["teacher"],
+      featureIds: [],
+    });
+  }
+
   function next() {
     const idea =
       intake.idea ||
@@ -152,7 +267,9 @@ export function BuilderPage() {
         ) as HTMLTextAreaElement | null
       )?.value ||
       "";
-    if (step === 0 && idea.trim().length < 3) return;
+    if (step === 0 && (ideaPath === "choose" || idea.trim().length < 3)) {
+      return;
+    }
     if (idea !== intake.idea) updateIntake({ idea });
     if (step === 2 && intake.audience.length === 0) return;
     setStep((current) => Math.min(current + 1, steps.length - 1));
@@ -224,47 +341,174 @@ export function BuilderPage() {
         <section className="mt-12">
           {step === 0 ? (
             <StepFrame
-              eyebrow="Mulai dari ide"
-              title="Aplikasi apa yang ingin Anda buat?"
-              description="Tuliskan gambaran singkatnya. Tidak perlu memakai istilah teknis."
+              eyebrow="Pilih cara mulai"
+              title="Apa yang ingin Anda wujudkan?"
+              description="Mulai dari ide yang sudah ada atau dari masalah yang ingin Anda selesaikan."
             >
-              <textarea
-                id="rakitapp-builder-idea"
-                autoFocus
-                value={intake.idea}
-                onChange={(event) => updateIntake({ idea: event.target.value })}
-                placeholder="Contoh: aplikasi kuis untuk siswa SMK dengan bank soal dan dashboard guru"
-                className="public-neon-input min-h-40 w-full resize-none rounded-2xl p-4 text-base leading-7 outline-none ring-offset-background"
-                maxLength={400}
-              />
-              <p className="public-neon-muted mt-2 text-right text-xs">
-                {intake.idea.length}/400
-              </p>
-              <div className="mt-6">
-                <p className="public-neon-muted flex items-center gap-2 text-sm">
-                  <IconSparkles className="size-4 text-cyan-300" />
-                  Atau mulai dari contoh
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {IDEA_EXAMPLES.map((example) => (
-                    <button
-                      type="button"
-                      key={example.label}
-                      onClick={() => updateIntake({ idea: example.idea })}
-                      aria-pressed={intake.idea === example.idea}
-                      data-selected={intake.idea === example.idea}
-                      className="public-neon-option public-neon-option-cyan inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium"
-                    >
-                      <IconSparkles className="size-3.5 text-cyan-300" />
-                      {example.label}
-                    </button>
-                  ))}
+              {ideaPath === "choose" ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={chooseIdeaPath}
+                    className="public-neon-option public-neon-option-cyan rounded-3xl border p-5 text-left sm:p-6"
+                  >
+                    <span className="grid size-11 place-items-center rounded-2xl border border-cyan-300/30 bg-cyan-400/10 text-2xl">
+                      💡
+                    </span>
+                    <span className="mt-5 block text-lg font-semibold text-white">
+                      Saya sudah punya ide
+                    </span>
+                    <span className="public-neon-muted mt-2 block text-sm leading-6">
+                      Ceritakan aplikasi yang ingin dibuat.
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIdeaPath("problem")}
+                    className="public-neon-option public-neon-option-violet rounded-3xl border p-5 text-left sm:p-6"
+                  >
+                    <span className="grid size-11 place-items-center rounded-2xl border border-violet-300/30 bg-violet-400/10 text-2xl">
+                      ✨
+                    </span>
+                    <span className="mt-5 block text-lg font-semibold text-white">
+                      Saya belum punya ide
+                    </span>
+                    <span className="public-neon-muted mt-2 block text-sm leading-6">
+                      Pilih masalah yang ingin diselesaikan.
+                    </span>
+                  </button>
                 </div>
-                <p className="public-neon-muted mt-3 text-xs">
-                  Pilih contoh untuk mengisi textarea, lalu Anda bisa
-                  menyesuaikannya.
-                </p>
-              </div>
+              ) : null}
+              {ideaPath === "idea" ? (
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setIdeaPath("choose")}
+                    className="public-neon-muted text-sm underline underline-offset-4 hover:text-white"
+                  >
+                    ← Ganti cara mulai
+                  </button>
+                  <textarea
+                    id="rakitapp-builder-idea"
+                    autoFocus
+                    value={intake.idea}
+                    onChange={(event) =>
+                      updateIntake({ idea: event.target.value })
+                    }
+                    placeholder="Contoh: siswa bisa mengerjakan soal dari HP dan nilainya langsung masuk"
+                    className="public-neon-input mt-4 min-h-40 w-full resize-none rounded-2xl p-4 text-base leading-7 outline-none ring-offset-background"
+                    maxLength={400}
+                  />
+                  <p className="public-neon-muted mt-2 text-right text-xs">
+                    {intake.idea.length}/400
+                  </p>
+                  <div className="mt-6">
+                    <p className="public-neon-muted flex items-center gap-2 text-sm">
+                      <IconSparkles className="size-4 text-cyan-300" />
+                      Atau mulai dari contoh
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {IDEA_EXAMPLES.map((example) => (
+                        <button
+                          type="button"
+                          key={example.label}
+                          onClick={() => updateIntake({ idea: example.idea })}
+                          aria-pressed={intake.idea === example.idea}
+                          data-selected={intake.idea === example.idea}
+                          className="public-neon-option public-neon-option-cyan inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium"
+                        >
+                          <IconSparkles className="size-3.5 text-cyan-300" />
+                          {example.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+              {ideaPath === "problem" ? (
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setIdeaPath("choose")}
+                    className="public-neon-muted text-sm underline underline-offset-4 hover:text-white"
+                  >
+                    ← Ganti cara mulai
+                  </button>
+                  <p className="public-neon-muted mt-4 text-sm">
+                    Masalah apa yang paling ingin Anda selesaikan?
+                  </p>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    {PROBLEM_PATHS.map((problem) => {
+                      const selected = selectedProblemId === problem.id;
+                      return (
+                        <button
+                          type="button"
+                          key={problem.id}
+                          onClick={() => chooseProblem(problem)}
+                          data-selected={selected}
+                          className="public-neon-option public-neon-option-violet rounded-2xl border p-4 text-left"
+                        >
+                          <span className="flex items-center justify-between gap-3 font-semibold text-white">
+                            {problem.label}
+                            {selected ? (
+                              <IconCheck className="size-5 text-cyan-300" />
+                            ) : null}
+                          </span>
+                          <span className="public-neon-muted mt-1 block text-sm leading-6">
+                            {problem.description}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {selectedProblemId
+                    ? (() => {
+                        const selectedProblem = PROBLEM_PATHS.find(
+                          (problem) => problem.id === selectedProblemId,
+                        );
+                        if (!selectedProblem) return null;
+                        return (
+                          <Card className="public-glass-panel mt-5 rounded-3xl border-violet-300/30">
+                            <CardContent className="p-5 sm:p-6">
+                              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-violet-200">
+                                Rekomendasi RakitApp
+                              </p>
+                              <h2 className="mt-2 text-xl font-semibold text-white">
+                                {selectedProblem.recommendation.name}
+                              </h2>
+                              <p className="public-neon-muted mt-2 text-sm leading-6">
+                                {selectedProblem.recommendation.explanation}
+                              </p>
+                              <div className="mt-4 flex flex-wrap gap-2">
+                                {selectedProblem.recommendation.featureIds.map(
+                                  (featureId) => {
+                                    const feature = getCategory(
+                                      selectedProblem.recommendation.categoryId,
+                                    ).features.find(
+                                      (item) => item.id === featureId,
+                                    );
+                                    return feature ? (
+                                      <span
+                                        key={featureId}
+                                        className="rounded-full border border-violet-300/25 bg-violet-400/10 px-3 py-1.5 text-sm text-violet-100"
+                                      >
+                                        {feature.label}
+                                      </span>
+                                    ) : null;
+                                  },
+                                )}
+                              </div>
+                              <p className="public-neon-muted mt-4 text-xs leading-5">
+                                Rancangan ini akan menjadi titik awal dan masih
+                                bisa disesuaikan di langkah berikutnya.
+                              </p>
+                            </CardContent>
+                          </Card>
+                        );
+                      })()
+                    : null}
+                </div>
+              ) : null}
             </StepFrame>
           ) : null}
           {step === 1 ? (
@@ -383,6 +627,10 @@ export function BuilderPage() {
             <Button
               type="button"
               onClick={next}
+              disabled={
+                step === 0 &&
+                (ideaPath === "choose" || intake.idea.trim().length < 3)
+              }
               className="public-neon-button rounded-xl px-5"
             >
               Lanjut <IconArrowRight className="size-4" />
