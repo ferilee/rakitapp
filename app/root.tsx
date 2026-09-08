@@ -51,8 +51,9 @@ export const links: LinksFunction = () => [
 const THEME_INIT_SCRIPT = getThemeInitScript();
 const LOCALE_INIT_SCRIPT = getLocaleInitScript();
 const APP_DESCRIPTION =
-  "RakitApp membantu mengubah ide menjadi brief proyek dan aplikasi yang siap dirakit.";
-const APP_SOCIAL_TITLE = "RakitApp — Dari ide menjadi aplikasi";
+  "RakitApp membantu guru dan sekolah mengubah masalah pendidikan menjadi solusi digital yang siap digunakan.";
+const APP_SOCIAL_TITLE =
+  "RakitApp — Dari masalah pendidikan menjadi solusi digital";
 const APP_SOCIAL_IMAGE = appPath("/og-image.png");
 
 export function Layout({ children }: { children: React.ReactNode }) {

@@ -114,12 +114,12 @@ export function CatalogPage({
               <IconSparkles className="size-4" /> Katalog RakitApp
             </p>
             <h1 className="mt-5 text-5xl font-semibold leading-[1.04] tracking-[-0.055em] text-white sm:text-6xl">
-              Aplikasi yang bisa kami rakit untuk kebutuhan Anda.
+              Contoh solusi digital untuk kebutuhan Anda.
             </h1>
             <p className="public-neon-copy mt-6 max-w-2xl text-lg leading-8">
-              Lihat contoh aplikasi pendidikan, website pribadi, dan produk
-              digital yang dapat disesuaikan dengan kebutuhan Anda. Semua
-              dimulai dari scope MVP yang sederhana dan terjangkau.
+              Lihat contoh solusi pendidikan, website pribadi, dan produk
+              digital yang dapat disesuaikan dengan masalah dan kebutuhan Anda.
+              Semua dimulai dari scope MVP yang sederhana dan terjangkau.
             </p>
             <div className="mt-6 flex flex-wrap gap-2 text-sm font-medium">
               <span className="rounded-full border border-pink-300/30 bg-pink-400/10 px-3 py-1.5 text-pink-100">
@@ -267,24 +267,24 @@ export function CatalogPage({
                 Belum menemukan yang sesuai?
               </p>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-                Ceritakan ide aplikasi Anda.
+                Punya masalah pendidikan yang ingin diselesaikan?
               </h2>
               <p className="public-neon-copy mt-3 max-w-xl leading-7">
-                RakitApp membantu mengubah kebutuhan Anda menjadi rancangan
-                fitur dan estimasi yang mudah dipahami.
+                Ceritakan masalahnya. RakitApp membantu menemukan bentuk solusi,
+                fitur, dan estimasi yang mudah dipahami.
               </p>
             </div>
             <Link
               to="/build"
               className="public-neon-button inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold"
             >
-              Mulai merancang <IconArrowRight className="size-4" />
+              Mulai Rakit Solusi <IconArrowRight className="size-4" />
             </Link>
           </div>
         </section>
 
         <footer className="public-neon-muted border-t border-slate-700/60 py-5 text-sm">
-          Dari ide → brief → aplikasi jadi.
+          Dari masalah → solusi → aplikasi siap digunakan.
         </footer>
       </div>
       <CatalogDemoDialog

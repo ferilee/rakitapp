@@ -211,7 +211,7 @@ export function LandingPage() {
               to="/build"
               className="public-neon-link hidden items-center gap-2 rounded-full border border-slate-500/40 bg-slate-900/50 px-4 py-2 text-sm font-medium sm:flex"
             >
-              Mulai merancang
+              Mulai Rakit Solusi
               <IconArrowRight className="size-4" />
             </Link>
           </div>
@@ -220,28 +220,28 @@ export function LandingPage() {
         <section className="grid flex-1 items-center gap-12 py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-24">
           <div>
             <p className="public-neon-badge mb-5 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium">
-              <IconSparkles className="size-4" /> Studio aplikasi pendidikan
+              <IconSparkles className="size-4" /> Solusi digital pendidikan
             </p>
             <h1 className="max-w-2xl text-5xl font-semibold leading-[1.02] tracking-[-0.055em] text-white sm:text-7xl">
-              <span className="block">Punya Ide Pembelajaran?</span>
+              <span className="block">Punya Masalah Pendidikan?</span>
               <span className="mt-3 block text-4xl text-cyan-300 drop-shadow-[0_0_18px_rgba(34,211,238,0.55)] sm:text-6xl">
-                Wujudkan Jadi Aplikasi.
+                Rakit Solusinya Jadi Aplikasi.
               </span>
             </h1>
             <p className="public-neon-copy mt-7 max-w-xl text-justify text-lg leading-8">
-              Ceritakan kebutuhan Anda. RakitApp membantu guru dan sekolah
-              mengubah ide menjadi aplikasi yang siap digunakan—tanpa perlu
-              paham coding.
+              Ceritakan kebutuhan di kelas atau sekolah Anda. RakitApp membantu
+              mengubah masalah dan ide pendidikan menjadi solusi digital yang
+              jelas, terjangkau, dan siap digunakan—tanpa perlu paham coding.
             </p>
             <Link
               to="/build"
               className="public-neon-button mt-9 inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
             >
-              Mulai Rakit Ide Saya
+              Mulai Rakit Solusi Saya
               <IconArrowRight className="size-4" />
             </Link>
             <p className="public-neon-muted mt-4 text-sm">
-              Gratis untuk menyusun rancangan awal.
+              Mulai dari masalah atau ide yang sudah Anda punya.
             </p>
           </div>
 
@@ -372,12 +372,13 @@ export function LandingPage() {
               id="how-it-works-title"
               className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl"
             >
-              Dari ide sampai aplikasi siap digunakan.
+              Dari masalah pendidikan sampai aplikasi siap digunakan.
             </h2>
             <p className="public-neon-copy mt-3 leading-7">
-              Anda menjelaskan kebutuhan pendidikan dengan bahasa sehari-hari.
-              RakitApp membantu menyusun rancangan dan biaya, tim merakit
-              aplikasinya, lalu Anda mencoba prototype sebelum dipublikasikan.
+              Anda menjelaskan masalah pendidikan dengan bahasa sehari-hari.
+              RakitApp membantu menemukan bentuk solusi, menyusun rancangan dan
+              biaya, lalu tim merakit aplikasi yang dapat Anda coba sebelum
+              dipublikasikan.
             </p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -385,42 +386,42 @@ export function LandingPage() {
               {
                 number: "01",
                 icon: IconMessageCircle,
-                title: "Ceritakan ide",
+                title: "Ceritakan masalah",
                 description:
-                  "Pilih contoh aplikasi atau tulis kebutuhan Anda tanpa istilah coding.",
+                  "Ceritakan kebutuhan di kelas atau sekolah dengan bahasa sehari-hari.",
               },
               {
                 number: "02",
                 icon: IconChecklist,
-                title: "Susun rancangan",
+                title: "Temukan bentuk solusi",
                 description:
-                  "Ide, pengguna, dan fitur dirapikan menjadi rancangan yang mudah dipahami.",
+                  "Jika belum punya bentuk aplikasi, pilih masalah dan RakitApp memberi rekomendasi.",
               },
               {
                 number: "03",
+                icon: IconClock,
+                title: "Susun rancangan",
+                description:
+                  "Masalah, pengguna, dan fitur dirapikan menjadi rancangan yang mudah dipahami.",
+              },
+              {
+                number: "04",
                 icon: IconClock,
                 title: "Tentukan biaya",
                 description:
                   "Lihat estimasi biaya dan durasi sebelum memutuskan aplikasi dikembangkan.",
               },
               {
-                number: "04",
-                icon: IconRocket,
-                title: "Kami rakit",
-                description:
-                  "Tim RakitApp mengembangkan aplikasi berdasarkan rancangan dan scope yang disepakati.",
-              },
-              {
                 number: "05",
                 icon: IconEye,
                 title: "Coba prototype",
                 description:
-                  "Coba aplikasi live dengan data contoh selama 8 jam untuk personal atau 24 jam untuk sekolah.",
+                  "Coba aplikasi live buatan tim dengan data contoh sebelum dipublikasikan.",
               },
               {
                 number: "06",
-                icon: IconCheck,
-                title: "Publikasikan",
+                icon: IconRocket,
+                title: "Gunakan solusi",
                 description:
                   "Setelah sesuai kebutuhan, aplikasi disiapkan untuk digunakan dan dipublikasikan.",
               },
@@ -615,21 +616,21 @@ export function LandingPage() {
               id="trust-title"
               className="mt-4 text-3xl font-semibold tracking-tight text-white"
             >
-              Anda memegang idenya. Kami bantu merapikan teknologinya.
+              Anda memahami masalahnya. Kami bantu merakit solusinya.
             </h2>
             <div className="mt-7 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
               {[
                 [
                   "Bahasa sederhana",
-                  "Mulai dari kebutuhan sehari-hari, tanpa harus memahami coding.",
+                  "Mulai dari masalah sehari-hari, tanpa harus memahami coding.",
                 ],
                 [
-                  "Harga terbuka",
-                  "Kisaran biaya terlihat sejak awal sebelum Anda berkonsultasi.",
+                  "Solusi sesuai kebutuhan",
+                  "RakitApp membantu memilih bentuk aplikasi yang sesuai dengan masalah Anda.",
                 ],
                 [
                   "Bisa dicoba",
-                  "Lihat contoh dan demo aplikasi untuk membandingkan kebutuhan Anda.",
+                  "Coba prototype live sebelum memutuskan aplikasi digunakan.",
                 ],
               ].map(([title, description]) => (
                 <div
@@ -652,8 +653,12 @@ export function LandingPage() {
             <div className="mt-4 divide-y divide-slate-700/60">
               {[
                 [
+                  "Apa yang sebenarnya dibantu RakitApp?",
+                  "RakitApp membantu mengubah masalah atau ide pendidikan menjadi rancangan solusi digital, memperkirakan biaya, mengembangkan prototype, dan menyiapkan aplikasi untuk digunakan.",
+                ],
+                [
                   "Apakah saya harus memahami coding?",
-                  "Tidak. Anda cukup menjelaskan kebutuhan dan memilih fitur yang paling dekat. RakitApp membantu menyusunnya menjadi rancangan.",
+                  "Tidak. Anda cukup menceritakan masalah atau kebutuhan dan memilih arah yang paling dekat. RakitApp membantu menyusunnya menjadi rancangan.",
                 ],
                 [
                   "Apakah estimasi ini sudah menjadi harga final?",
@@ -694,7 +699,7 @@ export function LandingPage() {
         </section>
 
         <footer className="public-neon-muted flex flex-col gap-3 border-t border-slate-700/60 py-5 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <span>Dari ide → brief → aplikasi jadi.</span>
+          <span>Dari masalah → solusi → aplikasi siap digunakan.</span>
           <span>RakitApp Studio</span>
         </footer>
       </div>
@@ -758,7 +763,7 @@ function PricingCard({
         to="/build"
         className="public-neon-button mt-6 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold"
       >
-        Mulai dari ide saya <IconArrowRight className="size-4" />
+        Mulai Rakit Solusi <IconArrowRight className="size-4" />
       </Link>
     </article>
   );
