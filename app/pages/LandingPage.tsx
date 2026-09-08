@@ -372,15 +372,15 @@ export function LandingPage() {
               id="how-it-works-title"
               className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl"
             >
-              Dari cerita singkat sampai prototype live.
+              Dari ide sampai aplikasi siap digunakan.
             </h2>
             <p className="public-neon-copy mt-3 leading-7">
               Anda menjelaskan kebutuhan pendidikan dengan bahasa sehari-hari.
-              RakitApp membantu merapikan brief, tim mengerjakan aplikasinya,
-              lalu Anda mencoba hasilnya sebelum memutuskan produksi.
+              RakitApp membantu menyusun rancangan dan biaya, tim merakit
+              aplikasinya, lalu Anda mencoba prototype sebelum dipublikasikan.
             </p>
           </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {[
               {
                 number: "01",
@@ -391,17 +391,38 @@ export function LandingPage() {
               },
               {
                 number: "02",
-                icon: IconRocket,
-                title: "Tim merakit",
+                icon: IconChecklist,
+                title: "Susun rancangan",
                 description:
-                  "Brief dan fitur dirapikan agar tim dapat membuat prototype yang sesuai.",
+                  "Ide, pengguna, dan fitur dirapikan menjadi rancangan yang mudah dipahami.",
               },
               {
                 number: "03",
                 icon: IconClock,
-                title: "Coba sebelum produksi",
+                title: "Tentukan biaya",
                 description:
-                  "Prototype live diaktifkan selama 8 jam untuk personal atau 24 jam untuk sekolah.",
+                  "Lihat estimasi biaya dan durasi sebelum memutuskan aplikasi dikembangkan.",
+              },
+              {
+                number: "04",
+                icon: IconRocket,
+                title: "Kami rakit",
+                description:
+                  "Tim RakitApp mengembangkan aplikasi berdasarkan rancangan dan scope yang disepakati.",
+              },
+              {
+                number: "05",
+                icon: IconEye,
+                title: "Coba prototype",
+                description:
+                  "Coba aplikasi live dengan data contoh selama 8 jam untuk personal atau 24 jam untuk sekolah.",
+              },
+              {
+                number: "06",
+                icon: IconCheck,
+                title: "Publikasikan",
+                description:
+                  "Setelah sesuai kebutuhan, aplikasi disiapkan untuk digunakan dan dipublikasikan.",
               },
             ].map(({ number, icon: Icon, title, description }) => (
               <article
