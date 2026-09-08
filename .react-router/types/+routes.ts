@@ -51,6 +51,9 @@ type Pages = {
   "/admin": {
     params: {};
   };
+  "/admin/login": {
+    params: {};
+  };
   "/agent": {
     params: {};
   };
@@ -73,7 +76,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/prototype/:trialToken" | "/my-prototypes" | "/observability" | "/extensions" | "/extensions/:id" | "/extensions/:id/:slug" | "/database" | "/settings" | "/catalog" | "/admin" | "/agent" | "/build" | "/chat" | "/chat/:threadId" | "/team";
+    page: "/" | "/prototype/:trialToken" | "/my-prototypes" | "/observability" | "/extensions" | "/extensions/:id" | "/extensions/:id/:slug" | "/database" | "/settings" | "/catalog" | "/admin" | "/admin/login" | "/agent" | "/build" | "/chat" | "/chat/:threadId" | "/team";
   };
   "routes/prototype.$trialToken.tsx": {
     id: "routes/prototype.$trialToken";
@@ -121,7 +124,11 @@ type RouteFiles = {
   };
   "routes/admin.tsx": {
     id: "routes/admin";
-    page: "/admin";
+    page: "/admin" | "/admin/login";
+  };
+  "routes/admin.login.tsx": {
+    id: "routes/admin.login";
+    page: "/admin/login";
   };
   "routes/agent.tsx": {
     id: "routes/agent";
@@ -159,6 +166,7 @@ type RouteModules = {
   "routes/catalog": typeof import("./app/routes/catalog.tsx");
   "routes/_index": typeof import("./app/routes/_index.tsx");
   "routes/admin": typeof import("./app/routes/admin.tsx");
+  "routes/admin.login": typeof import("./app/routes/admin.login.tsx");
   "routes/agent": typeof import("./app/routes/agent.tsx");
   "routes/build": typeof import("./app/routes/build.tsx");
   "routes/chat": typeof import("./app/routes/chat.tsx");

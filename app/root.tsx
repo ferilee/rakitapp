@@ -212,7 +212,9 @@ export default function Root() {
   const isPublicPath =
     location.pathname === "/" ||
     location.pathname === "/build" ||
-    location.pathname === "/catalog";
+    location.pathname === "/catalog" ||
+    location.pathname === "/admin" ||
+    location.pathname.startsWith("/admin/");
 
   if (isPublicPath) {
     return (
