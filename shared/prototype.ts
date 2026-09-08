@@ -24,6 +24,8 @@ export interface PrototypeTrial {
   demoUrl: string | null;
   activatedAt: string | null;
   trialExpiresAt: string | null;
+  archivedAt: string | null;
+  isTestData: boolean;
   updatedAt: string;
   trialHours: number;
 }

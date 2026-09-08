@@ -39,6 +39,8 @@ export default defineAction({
         updatedAt: row.updatedAt,
         activatedAt: row.activatedAt,
         trialExpiresAt: row.trialExpiresAt,
+        archivedAt: row.archivedAt,
+        isTestData: row.isTestData,
         trialHours: prototypeTrialHoursForCategory(brief.categoryId),
       };
     });

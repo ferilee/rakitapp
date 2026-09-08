@@ -32,6 +32,9 @@ export default defineAction({
         demoUrl: null,
         activatedAt: null,
         trialExpiresAt: null,
+        archivedAt: null,
+        archivedBy: null,
+        isTestData: false,
         updatedAt: now,
       });
 

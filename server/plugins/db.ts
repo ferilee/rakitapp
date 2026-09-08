@@ -124,6 +124,14 @@ CREATE INDEX IF NOT EXISTS prototype_trials_phase_updated_idx ON prototype_trial
       name: "rakitapp-prototype-trial-owners",
       sql: "ALTER TABLE prototype_trials ADD COLUMN owner_email TEXT;\nCREATE INDEX IF NOT EXISTS prototype_trials_owner_email_idx ON prototype_trials (owner_email);",
     },
+    {
+      version: 11,
+      name: "rakitapp-prototype-trial-archive-controls",
+      sql: `ALTER TABLE prototype_trials ADD COLUMN archived_at TEXT;
+ALTER TABLE prototype_trials ADD COLUMN archived_by TEXT;
+ALTER TABLE prototype_trials ADD COLUMN is_test_data INTEGER NOT NULL DEFAULT 0;
+CREATE INDEX IF NOT EXISTS prototype_trials_archive_idx ON prototype_trials (archived_at, is_test_data);`,
+    },
   ],
   { table: "rakitapp_migrations" },
 );

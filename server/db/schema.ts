@@ -37,6 +37,11 @@ export const prototypeTrials = table("prototype_trials", {
   demoUrl: text("demo_url"),
   activatedAt: text("activated_at"),
   trialExpiresAt: text("trial_expires_at"),
+  archivedAt: text("archived_at"),
+  archivedBy: text("archived_by"),
+  isTestData: integer("is_test_data", { mode: "boolean" })
+    .notNull()
+    .default(false),
   updatedAt: text("updated_at").notNull(),
 });
 

@@ -19,8 +19,9 @@ export default defineAction({
     trialToken: z.string().uuid(),
     phase: phaseSchema,
     demoUrl: z.string().url().nullable().optional(),
+    isTestData: z.boolean().optional(),
   }),
-  run: async ({ trialToken, phase, demoUrl }, ctx) => {
+  run: async ({ trialToken, phase, demoUrl, isTestData }, ctx) => {
     assertOperator(ctx?.userEmail);
     const db = getDb();
     const [existing] = await db
@@ -54,6 +55,7 @@ export default defineAction({
         activatedAt: activation ? nowIso : existing.activatedAt,
         trialExpiresAt,
         expiresAt: activation ? trialExpiresAt! : existing.expiresAt,
+        isTestData: isTestData ?? existing.isTestData,
         status: phase === "expired" ? "expired" : "active",
         updatedAt: nowIso,
       })
@@ -70,6 +72,8 @@ export default defineAction({
       updatedAt: row.updatedAt,
       activatedAt: row.activatedAt,
       trialExpiresAt: row.trialExpiresAt,
+      archivedAt: row.archivedAt,
+      isTestData: row.isTestData,
       trialHours: hours,
     };
   },

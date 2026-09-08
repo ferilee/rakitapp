@@ -183,6 +183,9 @@ beforeAll(async () => {
       demo_url TEXT,
       activated_at TEXT,
       trial_expires_at TEXT,
+      archived_at TEXT,
+      archived_by TEXT,
+      is_test_data INTEGER NOT NULL DEFAULT 0,
       updated_at TEXT NOT NULL
     );
     CREATE INDEX project_leads_status_updated_idx ON project_leads (status, updated_at);
@@ -203,6 +206,7 @@ beforeAll(async () => {
     import("./list-catalog-apps.js"),
     import("./list-leads.js"),
     import("./list-prototype-trials-admin.js"),
+    import("./manage-prototype-trials.js"),
     import("./recommend-catalog-app.js"),
     import("./reorder-catalog-apps.js"),
     import("./save-prototype-trial.js"),
@@ -226,15 +230,16 @@ beforeAll(async () => {
     "list-catalog-apps": imported[9].default,
     "list-leads": imported[10].default,
     "list-prototype-trials-admin": imported[11].default,
-    "recommend-catalog-app": imported[12].default,
-    "reorder-catalog-apps": imported[13].default,
-    "save-prototype-trial": imported[14].default,
-    "start-prototype-trial": imported[15].default,
-    "submit-consultation": imported[16].default,
-    "update-catalog-app": imported[17].default,
-    "update-lead": imported[18].default,
-    "update-prototype-trial": imported[19].default,
-    "upload-catalog-cover": imported[20].default,
+    "manage-prototype-trials": imported[12].default,
+    "recommend-catalog-app": imported[13].default,
+    "reorder-catalog-apps": imported[14].default,
+    "save-prototype-trial": imported[15].default,
+    "start-prototype-trial": imported[16].default,
+    "submit-consultation": imported[17].default,
+    "update-catalog-app": imported[18].default,
+    "update-lead": imported[19].default,
+    "update-prototype-trial": imported[20].default,
+    "upload-catalog-cover": imported[21].default,
   };
 });
 
@@ -588,6 +593,78 @@ describe("RakitApp prototype actions", () => {
       operator,
     );
     expect(adminList[0].trialToken).toBe(started.trialToken);
+  });
+
+  it("archives, restores, and permanently removes only archived test data", async () => {
+    const testPrototype = await action("start-prototype-trial").run({ intake });
+    const clientPrototype = await action("start-prototype-trial").run({
+      intake,
+    });
+
+    await action("update-prototype-trial").run(
+      {
+        trialToken: testPrototype.trialToken,
+        phase: "building",
+        isTestData: true,
+      },
+      operator,
+    );
+
+    const archived = await action("manage-prototype-trials").run(
+      {
+        operation: "archive",
+        trialTokens: [testPrototype.trialToken, clientPrototype.trialToken],
+      },
+      operator,
+    );
+    expect(archived.affectedCount).toBe(2);
+
+    const archivedList = await action("list-prototype-trials-admin").run(
+      {},
+      operator,
+    );
+    expect(archivedList).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          trialToken: testPrototype.trialToken,
+          archivedAt: expect.any(String),
+          isTestData: true,
+        }),
+        expect.objectContaining({
+          trialToken: clientPrototype.trialToken,
+          archivedAt: expect.any(String),
+          isTestData: false,
+        }),
+      ]),
+    );
+
+    await action("manage-prototype-trials").run(
+      {
+        operation: "delete-test",
+        trialTokens: [testPrototype.trialToken, clientPrototype.trialToken],
+      },
+      operator,
+    );
+    const afterDelete = await action("list-prototype-trials-admin").run(
+      {},
+      operator,
+    );
+    expect(afterDelete.map((prototype: any) => prototype.trialToken)).toEqual([
+      clientPrototype.trialToken,
+    ]);
+
+    await action("manage-prototype-trials").run(
+      { operation: "restore", trialTokens: [clientPrototype.trialToken] },
+      operator,
+    );
+    const restored = await action("list-prototype-trials-admin").run(
+      {},
+      operator,
+    );
+    expect(restored[0]).toMatchObject({
+      trialToken: clientPrototype.trialToken,
+      archivedAt: null,
+    });
   });
 
   it("reports an expired activated prototype and validates missing tokens", async () => {

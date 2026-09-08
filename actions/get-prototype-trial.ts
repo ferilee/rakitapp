@@ -53,6 +53,8 @@ export default defineAction({
       demoUrl: row.demoUrl,
       activatedAt: row.activatedAt,
       trialExpiresAt: row.trialExpiresAt,
+      archivedAt: row.archivedAt,
+      isTestData: row.isTestData,
       updatedAt: row.updatedAt,
       trialHours: prototypeTrialHoursForCategory(brief.categoryId),
     };
