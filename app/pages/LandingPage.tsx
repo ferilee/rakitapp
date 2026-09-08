@@ -462,7 +462,7 @@ export function LandingPage() {
                 id="pricing-title"
                 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl"
               >
-                Mulai dari kebutuhan yang paling ringan.
+                Mulai Sesuai Kebutuhan Anda
               </h2>
             </div>
             <p className="public-neon-muted max-w-md text-sm leading-6 sm:text-right">
@@ -470,12 +470,12 @@ export function LandingPage() {
               sesuai kemampuan sebelum berkonsultasi.
             </p>
           </div>
-          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
             <PricingCard
               accent="pink"
-              eyebrow="Untuk guru dan personal"
+              eyebrow="Personal"
               title="Aplikasi pribadi"
-              price="Rp 100 rb – Rp 300 rb"
+              price="Mulai Rp100 ribuan"
               description="Cocok untuk mulai membangun kehadiran digital atau alat bantu kerja pribadi."
               items={[
                 "Website portofolio",
@@ -485,9 +485,21 @@ export function LandingPage() {
             />
             <PricingCard
               accent="cyan"
-              eyebrow="Untuk sekolah dan tim"
-              title="Aplikasi pendidikan"
-              price="Rp 1 jt – Rp 5 jt"
+              eyebrow="Guru & Pembelajaran"
+              title="Aplikasi untuk guru"
+              price="Mulai Rp500 ribuan"
+              description="Cocok untuk membantu kegiatan mengajar, pembelajaran, dan administrasi pribadi guru."
+              items={[
+                "Jurnal mengajar",
+                "Kuis dan media belajar",
+                "Form dan dashboard guru",
+              ]}
+            />
+            <PricingCard
+              accent="violet"
+              eyebrow="Sekolah & Institusi"
+              title="Aplikasi sekolah"
+              price="Mulai Rp1 jutaan"
               description="Cocok untuk alur belajar, asesmen, administrasi, dan dashboard sekolah."
               items={[
                 "LMS dan kelas digital",
@@ -703,7 +715,7 @@ function PricingCard({
   description,
   items,
 }: {
-  accent: "pink" | "cyan";
+  accent: "pink" | "cyan" | "violet";
   eyebrow: string;
   title: string;
   price: string;
@@ -713,7 +725,9 @@ function PricingCard({
   const accentClass =
     accent === "pink"
       ? "border-pink-300/30 bg-pink-400/10 text-pink-200"
-      : "border-cyan-300/30 bg-cyan-400/10 text-cyan-200";
+      : accent === "violet"
+        ? "border-violet-300/30 bg-violet-400/10 text-violet-200"
+        : "border-cyan-300/30 bg-cyan-400/10 text-cyan-200";
 
   return (
     <article
