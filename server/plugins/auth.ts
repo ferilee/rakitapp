@@ -6,6 +6,7 @@ const appTitle =
 
 export default createAuthPlugin({
   workspaceAppAudience: "public",
+  workspaceAppPublicPaths: ["/prototype"],
   workspaceAppProtectedPaths: [
     "/admin",
     "/agent",
