@@ -225,27 +225,14 @@ export function LandingPage() {
             <h1 className="max-w-2xl text-5xl font-semibold leading-[1.02] tracking-[-0.055em] text-white sm:text-7xl">
               <span className="block">Punya Ide Pembelajaran?</span>
               <span className="mt-3 block text-4xl text-cyan-300 drop-shadow-[0_0_18px_rgba(34,211,238,0.55)] sm:text-6xl">
-                Yuk, Wujudkan Jadi Aplikasi!
+                Wujudkan Jadi Aplikasi.
               </span>
             </h1>
-            <div className="public-neon-copy mt-7 max-w-xl space-y-4 text-justify text-lg leading-8">
-              <p>
-                Punya ide untuk media pembelajaran, asesmen, administrasi
-                sekolah, atau aplikasi pendidikan lainnya? Ceritakan saja
-                idenya—tak perlu pusing soal coding.
-              </p>
-              <p>
-                <strong className="font-semibold text-slate-100">
-                  RakitApp
-                </strong>{" "}
-                membantu guru dan sekolah mengubah ide menjadi rancangan
-                aplikasi yang jelas dan siap diwujudkan.
-              </p>
-              <p className="font-semibold text-slate-100">
-                Anda fokus pada ide dan kebutuhan pendidikan. Biar RakitApp yang
-                merakit teknologinya.
-              </p>
-            </div>
+            <p className="public-neon-copy mt-7 max-w-xl text-justify text-lg leading-8">
+              Ceritakan kebutuhan Anda. RakitApp membantu guru dan sekolah
+              mengubah ide menjadi aplikasi yang siap digunakan—tanpa perlu
+              paham coding.
+            </p>
             <Link
               to="/build"
               className="public-neon-button mt-9 inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
