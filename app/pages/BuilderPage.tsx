@@ -81,6 +81,14 @@ function formatCurrency(value: number) {
   return `Rp ${value.toLocaleString("id-ID")}`;
 }
 
+function formatBriefName(value: string) {
+  return value
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/Link Bio/gi, "LinkBio")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function newIntake(): ProjectIntake {
   return { idea: "", categoryId: "lms", audience: ["teacher"], featureIds: [] };
 }
@@ -459,7 +467,7 @@ function BriefPage({
   const whatsappMessage = encodeURIComponent(
     [
       "Halo RakitApp, saya ingin konsultasi rancangan aplikasi.",
-      "Nama sementara: " + brief.temporaryName,
+      "Nama sementara: " + formatBriefName(brief.temporaryName),
       "Jenis aplikasi: " + brief.categoryLabel,
       "Estimasi: " +
         formatCurrency(brief.estimate.priceMin) +
@@ -471,26 +479,36 @@ function BriefPage({
 
   return (
     <main className="public-neon-page public-neon-grid min-h-screen px-5 py-8 sm:px-8">
-      <div className="mx-auto max-w-4xl">
-        <Link to="/" className="public-neon-link text-sm font-semibold">
-          ← RakitApp
-        </Link>
-        <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_320px]">
-          <section>
-            <p className="text-sm font-medium text-cyan-300">
-              Rancangan proyek Anda
+      <div className="mx-auto max-w-6xl">
+        <header className="flex items-center justify-between">
+          <Link to="/" className="public-neon-link text-sm font-semibold">
+            ← RakitApp
+          </Link>
+          <span className="rounded-full border border-cyan-300/20 bg-cyan-300/5 px-3 py-1 text-xs font-medium text-cyan-100">
+            Rancangan siap ditinjau
+          </span>
+        </header>
+        <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-10">
+          <section className="min-w-0">
+            <p className="text-sm font-medium uppercase tracking-[0.18em] text-cyan-300">
+              Rancangan aplikasi Anda
             </p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              {brief.temporaryName}
+            <h1 className="mt-3 max-w-3xl break-words text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              {formatBriefName(brief.temporaryName)}
             </h1>
-            <p className="public-neon-copy mt-4 max-w-2xl text-lg leading-8">
+            <p className="public-neon-copy mt-5 max-w-3xl text-lg leading-8">
               {brief.idea}
             </p>
             <Card className="public-glass-panel mt-8 rounded-3xl">
-              <CardHeader>
-                <CardTitle className="text-xl">Ringkasan kebutuhan</CardTitle>
+              <CardHeader className="pb-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <CardTitle className="text-xl">Ringkasan kebutuhan</CardTitle>
+                  <span className="rounded-full border border-emerald-300/25 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-200">
+                    Brief awal
+                  </span>
+                </div>
               </CardHeader>
-              <CardContent className="grid gap-5 sm:grid-cols-2">
+              <CardContent className="grid gap-6 sm:grid-cols-2">
                 <SummaryItem
                   label="Jenis aplikasi"
                   value={brief.categoryLabel}
@@ -501,7 +519,7 @@ function BriefPage({
                 />
                 <div className="sm:col-span-2">
                   <p className="public-neon-muted text-sm">Fitur terpilih</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div className="mt-3 flex flex-wrap gap-2">
                     {brief.features.map((feature) => (
                       <span
                         key={feature.id}
@@ -514,73 +532,73 @@ function BriefPage({
                 </div>
               </CardContent>
             </Card>
+            <BriefPreview brief={brief} />
             <button
               type="button"
               onClick={onEdit}
               className="public-neon-muted mt-5 text-sm font-medium underline underline-offset-4 hover:text-white"
             >
-              Ubah rancangan
+              ← Ubah rancangan
             </button>
           </section>
-          <aside>
+          <aside className="lg:sticky lg:top-8">
             <Card className="public-neon-estimate rounded-3xl text-white">
-              <CardContent className="p-6">
+              <CardContent className="p-6 sm:p-7">
                 <p className="public-neon-muted text-sm">Estimasi indikatif</p>
-                <p className="mt-3 text-2xl font-semibold">
+                <p className="mt-3 text-3xl font-semibold tracking-tight">
                   {formatCurrency(brief.estimate.priceMin)}
                   <span className="text-cyan-200"> – </span>
                   {formatCurrency(brief.estimate.priceMax)}
                 </p>
-                <div className="mt-5 border-t border-white/10 pt-4 text-sm">
-                  <div className="flex justify-between gap-3">
-                    <span className="public-neon-muted">Kompleksitas</span>
-                    <span className="capitalize">
+                <div className="mt-6 grid grid-cols-2 gap-4 border-t border-white/10 pt-5 text-sm">
+                  <div>
+                    <span className="public-neon-muted block">
+                      Kompleksitas
+                    </span>
+                    <span className="mt-1 block capitalize font-medium">
                       {brief.estimate.complexity}
                     </span>
                   </div>
-                  <div className="mt-3 flex justify-between gap-3">
-                    <span className="public-neon-muted">Durasi</span>
-                    <span>
+                  <div>
+                    <span className="public-neon-muted block">Durasi</span>
+                    <span className="mt-1 block font-medium">
                       {brief.estimate.daysMin}–{brief.estimate.daysMax} hari
                     </span>
                   </div>
                 </div>
                 <p className="public-neon-muted mt-5 text-xs leading-5">
-                  Angka ini adalah kisaran awal. Scope final dibahas saat
-                  konsultasi.
+                  Kisaran awal untuk scope MVP. Harga final dibahas bersama tim
+                  setelah kebutuhan dikonfirmasi.
                 </p>
-              </CardContent>
-            </Card>
-            <Card className="public-glass-panel mt-5 rounded-3xl border-slate-700/70 text-white">
-              <CardContent className="p-6">
-                <p className="text-sm font-semibold text-cyan-100">
-                  Paket awal biasanya mencakup
-                </p>
-                <ul className="mt-3 space-y-2">
-                  {packageDetails.includes.map((item) => (
-                    <li
-                      key={item}
-                      className="public-neon-muted flex gap-2 text-xs leading-5"
-                    >
-                      <IconCheck className="mt-0.5 size-3.5 shrink-0 text-emerald-300" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-3 text-[0.7rem] leading-5 text-slate-500">
-                  {packageDetails.note}
-                </p>
+                <div className="mt-6 border-t border-white/10 pt-5">
+                  <p className="text-sm font-semibold text-cyan-100">
+                    Paket awal biasanya mencakup
+                  </p>
+                  <ul className="mt-3 space-y-2">
+                    {packageDetails.includes.map((item) => (
+                      <li
+                        key={item}
+                        className="public-neon-muted flex gap-2 text-xs leading-5"
+                      >
+                        <IconCheck className="mt-0.5 size-3.5 shrink-0 text-emerald-300" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-[0.7rem] leading-5 text-slate-500">
+                    {packageDetails.note}
+                  </p>
+                </div>
               </CardContent>
             </Card>
             <Card className="mt-5 rounded-3xl border border-cyan-300/30 bg-cyan-400/10 text-white shadow-[0_0_34px_rgba(34,211,238,0.12)]">
               <CardContent className="p-6">
                 <p className="text-sm font-semibold text-cyan-100">
-                  Minta prototype dari tim
+                  Langkah berikutnya
                 </p>
                 <p className="public-neon-muted mt-2 text-sm leading-6">
-                  Ceritakan ide Anda. Tim RakitApp akan membuat aplikasi nyata
-                  berdasarkan brief ini, lalu mengirimkan akses demo setelah
-                  siap.
+                  Tim RakitApp dapat membuat versi awal yang bisa dicoba dari
+                  brief ini.
                 </p>
                 <Button
                   type="button"
@@ -764,5 +782,89 @@ function SummaryItem({ label, value }: { label: string; value: string }) {
       <p className="public-neon-muted text-sm">{label}</p>
       <p className="mt-1 font-medium text-slate-100">{value}</p>
     </div>
+  );
+}
+
+function BriefPreview({ brief }: { brief: ProjectBrief }) {
+  const previewFeatures = brief.features.slice(0, 4);
+
+  return (
+    <Card className="public-glass-panel mt-6 overflow-hidden rounded-3xl">
+      <CardHeader className="pb-4">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="public-neon-muted text-xs uppercase tracking-[0.18em]">
+              Gambaran awal
+            </p>
+            <CardTitle className="mt-2 text-xl">Preview rancangan</CardTitle>
+          </div>
+          <span className="text-xs text-slate-500">Konsep layar utama</span>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="rounded-2xl border border-cyan-300/20 bg-slate-950/70 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-5">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center gap-1.5">
+              <span className="size-2 rounded-full bg-rose-300/80" />
+              <span className="size-2 rounded-full bg-amber-300/80" />
+              <span className="size-2 rounded-full bg-emerald-300/80" />
+            </div>
+            <span className="rounded-full border border-slate-700 px-2.5 py-1 text-[0.65rem] text-slate-500">
+              RakitApp preview
+            </span>
+          </div>
+          <div className="mt-5 grid gap-5 sm:grid-cols-[minmax(0,1.1fr)_minmax(170px,0.9fr)] sm:items-center">
+            <div>
+              <p className="text-xs font-medium text-cyan-300">
+                {brief.categoryLabel}
+              </p>
+              <p className="mt-2 text-2xl font-semibold tracking-tight text-white">
+                {formatBriefName(brief.temporaryName)}
+              </p>
+              <p className="public-neon-muted mt-2 text-sm leading-6">
+                {brief.idea}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {previewFeatures.map((feature) => (
+                  <span
+                    key={feature.id}
+                    className="rounded-full bg-cyan-400/10 px-2.5 py-1 text-xs text-cyan-100"
+                  >
+                    {feature.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl border border-violet-300/20 bg-gradient-to-br from-cyan-400/10 via-violet-400/10 to-pink-400/10 p-4">
+              <div className="flex items-center justify-between text-xs text-slate-400">
+                <span>Progress konsep</span>
+                <span className="text-cyan-200">MVP</span>
+              </div>
+              <div className="mt-4 h-2 rounded-full bg-slate-800">
+                <div className="h-2 w-3/4 rounded-full bg-gradient-to-r from-cyan-300 to-violet-400 shadow-[0_0_16px_rgba(34,211,238,0.35)]" />
+              </div>
+              <div className="mt-5 grid grid-cols-2 gap-2 text-center">
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] px-2 py-3">
+                  <p className="text-lg font-semibold text-white">
+                    {brief.features.length}
+                  </p>
+                  <p className="mt-1 text-[0.65rem] text-slate-500">fitur</p>
+                </div>
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] px-2 py-3">
+                  <p className="text-lg font-semibold text-white">
+                    {brief.audience.length}
+                  </p>
+                  <p className="mt-1 text-[0.65rem] text-slate-500">peran</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className="public-neon-muted mt-3 text-xs leading-5">
+          Preview ini membantu memvisualisasikan arah aplikasi sebelum tim mulai
+          membuat prototype live.
+        </p>
+      </CardContent>
+    </Card>
   );
 }
