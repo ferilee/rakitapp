@@ -1,4 +1,9 @@
-import { useActionQuery } from "@agent-native/core/client/hooks";
+import { agentNativePath } from "@agent-native/core/client/api-path";
+import {
+  useActionMutation,
+  useActionQuery,
+  useSession,
+} from "@agent-native/core/client/hooks";
 import {
   getPrototypeRemainingMs,
   type PrototypeTrial,
@@ -7,11 +12,14 @@ import {
 // i18n-raw-literal-disable-file: RakitApp MVP copy is intentionally Indonesian.
 import {
   IconArrowRight,
+  IconBrandGoogle,
+  IconCheck,
+  IconCopy,
   IconCircleCheck,
   IconExternalLink,
   IconLoader2,
 } from "@tabler/icons-react";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
@@ -31,14 +39,49 @@ function formatCurrency(value: number) {
   return `Rp ${value.toLocaleString("id-ID")}`;
 }
 
+function formatBriefName(value: string) {
+  return value
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/Link Bio/gi, "LinkBio")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function PrototypePage({ trialToken }: { trialToken: string }) {
   const navigate = useNavigate();
+  const { session } = useSession();
+  const savePrototype = useActionMutation("save-prototype-trial");
   const trialQuery = useActionQuery<PrototypeTrial>(
     "get-prototype-trial",
     { trialToken },
     { enabled: Boolean(trialToken), retry: false },
   );
   const [now, setNow] = useState(() => Date.now());
+  const [copied, setCopied] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const saveAttemptedRef = useRef(false);
+
+  useEffect(() => {
+    if (!trialToken) return;
+    const stored = JSON.parse(
+      window.localStorage.getItem("rakitapp-prototype-tokens") ?? "[]",
+    ) as string[];
+    if (!stored.includes(trialToken)) {
+      window.localStorage.setItem(
+        "rakitapp-prototype-tokens",
+        JSON.stringify([trialToken, ...stored].slice(0, 5)),
+      );
+    }
+  }, [trialToken]);
+
+  useEffect(() => {
+    if (!session || saveAttemptedRef.current) return;
+    if (new URLSearchParams(window.location.search).get("save") !== "1") {
+      return;
+    }
+    saveAttemptedRef.current = true;
+    savePrototype.mutate({ trialToken }, { onSuccess: () => setSaved(true) });
+  }, [savePrototype, session, trialToken]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
@@ -71,6 +114,34 @@ export function PrototypePage({ trialToken }: { trialToken: string }) {
       )}`
     : "https://wa.me/";
 
+  function copyPrototypeLink() {
+    void navigator.clipboard?.writeText(window.location.href);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2200);
+  }
+
+  function savePrototypeToAccount() {
+    if (session) {
+      savePrototype.mutate({ trialToken }, { onSuccess: () => setSaved(true) });
+      return;
+    }
+    const returnPath = `${window.location.pathname}?save=1`;
+    window.location.assign(
+      `${agentNativePath("/_agent-native/sign-in")}?return=${encodeURIComponent(returnPath)}`,
+    );
+  }
+
+  const saveActions = (
+    <PrototypeSaveCard
+      copied={copied}
+      saved={saved || savePrototype.isSuccess}
+      saving={savePrototype.isPending}
+      signedIn={Boolean(session)}
+      onCopy={copyPrototypeLink}
+      onSave={savePrototypeToAccount}
+    />
+  );
+
   if (trialQuery.isLoading) return <PrototypeLoading />;
 
   if (trialQuery.isError || !trial) {
@@ -101,7 +172,9 @@ export function PrototypePage({ trialToken }: { trialToken: string }) {
   }
 
   if (phase !== "active" || !trial.demoUrl) {
-    return <PrototypePending trial={trial} phase={phase} />;
+    return (
+      <PrototypePending trial={trial} phase={phase} saveActions={saveActions} />
+    );
   }
 
   return (
@@ -131,7 +204,7 @@ export function PrototypePage({ trialToken }: { trialToken: string }) {
               Prototype live
             </p>
             <h1 className="mt-3 text-2xl font-semibold tracking-tight">
-              {trial.brief.temporaryName}
+              {formatBriefName(trial.brief.temporaryName)}
             </h1>
             <p className="public-neon-muted mt-1 text-sm">
               {trial.brief.categoryLabel}
@@ -202,6 +275,7 @@ export function PrototypePage({ trialToken }: { trialToken: string }) {
                 </a>
               </CardContent>
             </Card>
+            {saveActions}
           </section>
         </section>
       </div>
@@ -212,9 +286,11 @@ export function PrototypePage({ trialToken }: { trialToken: string }) {
 function PrototypePending({
   trial,
   phase,
+  saveActions,
 }: {
   trial: PrototypeTrial;
   phase: PrototypeTrialPhase;
+  saveActions: ReactNode;
 }) {
   const copy = {
     requested: {
@@ -243,24 +319,100 @@ function PrototypePending({
   }[phase];
 
   return (
-    <PrototypeMessage
-      title={copy.title}
-      description={copy.description}
-      action="Buat rancangan lain"
-      onAction={() => window.location.assign("/build")}
-      detail={
-        <div className="mt-5 rounded-2xl border border-cyan-300/20 bg-slate-950/45 p-4 text-left text-sm">
-          <p className="text-slate-400">Rancangan</p>
-          <p className="mt-1 font-semibold text-white">
-            {trial.brief.temporaryName}
-          </p>
-          <p className="mt-3 text-slate-400">
-            Perkiraan masa coba setelah aktif
-          </p>
-          <p className="mt-1 text-cyan-200">{trial.trialHours} jam</p>
+    <>
+      <PrototypeMessage
+        title={copy.title}
+        description={copy.description}
+        action="Buat rancangan lain"
+        onAction={() => window.location.assign("/build")}
+        detail={
+          <div className="mt-5 rounded-2xl border border-cyan-300/20 bg-slate-950/45 p-4 text-left text-sm">
+            <p className="text-slate-400">Rancangan</p>
+            <p className="mt-1 font-semibold text-white">
+              {formatBriefName(trial.brief.temporaryName)}
+            </p>
+            <p className="mt-3 text-slate-400">
+              Perkiraan masa coba setelah aktif
+            </p>
+            <p className="mt-1 text-cyan-200">{trial.trialHours} jam</p>
+          </div>
+        }
+      />
+      {saveActions}
+    </>
+  );
+}
+
+function PrototypeSaveCard({
+  copied,
+  saved,
+  saving,
+  signedIn,
+  onCopy,
+  onSave,
+}: {
+  copied: boolean;
+  saved: boolean;
+  saving: boolean;
+  signedIn: boolean;
+  onCopy: () => void;
+  onSave: () => void;
+}) {
+  return (
+    <Card className="public-glass-panel mx-auto mt-5 w-full max-w-xl rounded-3xl border-cyan-300/25">
+      <CardContent className="p-5 sm:p-6">
+        <p className="text-base font-semibold text-white">
+          Simpan akses prototype Anda
+        </p>
+        <p className="public-neon-muted mt-2 text-sm leading-6">
+          Simpan tautan di perangkat ini atau hubungkan ke akun Google agar
+          dapat dibuka kembali setelah browser ditutup.
+        </p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCopy}
+            className="h-11 rounded-xl border-slate-700 bg-slate-950/50 text-slate-200"
+          >
+            {copied ? (
+              <IconCheck className="size-4" />
+            ) : (
+              <IconCopy className="size-4" />
+            )}
+            {copied ? "Tautan tersalin" : "Salin tautan"}
+          </Button>
+          {saved ? (
+            <Link
+              to="/my-prototypes"
+              className="public-neon-button inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold"
+            >
+              <IconCheck className="size-4" /> Tersimpan di akun
+            </Link>
+          ) : (
+            <Button
+              type="button"
+              onClick={onSave}
+              disabled={saving}
+              className="public-neon-button h-11 rounded-xl"
+            >
+              {saving ? (
+                <IconLoader2 className="size-4 animate-spin" />
+              ) : signedIn ? (
+                <IconCheck className="size-4" />
+              ) : (
+                <IconBrandGoogle className="size-4" />
+              )}
+              {saving
+                ? "Menyimpan..."
+                : signedIn
+                  ? "Simpan ke akun"
+                  : "Simpan dengan Google"}
+            </Button>
+          )}
         </div>
-      }
-    />
+      </CardContent>
+    </Card>
   );
 }
 

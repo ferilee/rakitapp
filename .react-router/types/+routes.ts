@@ -19,6 +19,9 @@ type Pages = {
       "trialToken": string;
     };
   };
+  "/my-prototypes": {
+    params: {};
+  };
   "/observability": {
     params: {};
   };
@@ -70,11 +73,15 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/prototype/:trialToken" | "/observability" | "/extensions" | "/extensions/:id" | "/extensions/:id/:slug" | "/database" | "/settings" | "/catalog" | "/admin" | "/agent" | "/build" | "/chat" | "/chat/:threadId" | "/team";
+    page: "/" | "/prototype/:trialToken" | "/my-prototypes" | "/observability" | "/extensions" | "/extensions/:id" | "/extensions/:id/:slug" | "/database" | "/settings" | "/catalog" | "/admin" | "/agent" | "/build" | "/chat" | "/chat/:threadId" | "/team";
   };
   "routes/prototype.$trialToken.tsx": {
     id: "routes/prototype.$trialToken";
     page: "/prototype/:trialToken";
+  };
+  "routes/my-prototypes.tsx": {
+    id: "routes/my-prototypes";
+    page: "/my-prototypes";
   };
   "routes/observability.tsx": {
     id: "routes/observability";
@@ -141,6 +148,7 @@ type RouteFiles = {
 type RouteModules = {
   "root": typeof import("./app/root.tsx");
   "routes/prototype.$trialToken": typeof import("./app/routes/prototype.$trialToken.tsx");
+  "routes/my-prototypes": typeof import("./app/routes/my-prototypes.tsx");
   "routes/observability": typeof import("./app/routes/observability.tsx");
   "routes/extensions": typeof import("./app/routes/extensions.tsx");
   "routes/extensions._index": typeof import("./app/routes/extensions._index.tsx");

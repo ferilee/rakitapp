@@ -16,6 +16,7 @@ export default createAuthPlugin({
     "/observability",
     "/settings",
     "/team",
+    "/my-prototypes",
   ],
   publicPaths: [
     "/_agent-native/actions/calculate-project-estimate",

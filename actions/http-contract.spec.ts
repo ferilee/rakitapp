@@ -12,12 +12,14 @@ const endpointNames = [
   "get-lead",
   "get-prototype-trial",
   "get-public-activity",
+  "list-my-prototype-trials",
   "list-catalog-apps-admin",
   "list-catalog-apps",
   "list-leads",
   "list-prototype-trials-admin",
   "recommend-catalog-app",
   "reorder-catalog-apps",
+  "save-prototype-trial",
   "start-prototype-trial",
   "submit-consultation",
   "update-catalog-app",
@@ -36,6 +38,7 @@ const protectedGetActions = new Set([
   "get-lead",
   "list-catalog-apps-admin",
   "list-leads",
+  "list-my-prototype-trials",
   "list-prototype-trials-admin",
 ]);
 

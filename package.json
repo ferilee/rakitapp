@@ -101,6 +101,7 @@
   "engines": {
     "node": ">=22.22.0"
   },
+  "packageManager": "pnpm@10.29.1",
   "agent-native": {
     "workspaceApp": {
       "audience": "public",
@@ -121,9 +122,9 @@
         "/extensions",
         "/observability",
         "/settings",
-        "/team"
+        "/team",
+        "/my-prototypes"
       ]
     }
-  },
-  "packageManager": "pnpm@10.29.1"
+  }
 }

@@ -175,6 +175,7 @@ beforeAll(async () => {
     CREATE TABLE prototype_trials (
       id TEXT PRIMARY KEY,
       brief TEXT NOT NULL,
+      owner_email TEXT,
       status TEXT NOT NULL DEFAULT 'active',
       created_at TEXT NOT NULL,
       expires_at TEXT NOT NULL,
@@ -197,12 +198,14 @@ beforeAll(async () => {
     import("./get-lead.js"),
     import("./get-prototype-trial.js"),
     import("./get-public-activity.js"),
+    import("./list-my-prototype-trials.js"),
     import("./list-catalog-apps-admin.js"),
     import("./list-catalog-apps.js"),
     import("./list-leads.js"),
     import("./list-prototype-trials-admin.js"),
     import("./recommend-catalog-app.js"),
     import("./reorder-catalog-apps.js"),
+    import("./save-prototype-trial.js"),
     import("./start-prototype-trial.js"),
     import("./submit-consultation.js"),
     import("./update-catalog-app.js"),
@@ -218,18 +221,20 @@ beforeAll(async () => {
     "get-lead": imported[4].default,
     "get-prototype-trial": imported[5].default,
     "get-public-activity": imported[6].default,
-    "list-catalog-apps-admin": imported[7].default,
-    "list-catalog-apps": imported[8].default,
-    "list-leads": imported[9].default,
-    "list-prototype-trials-admin": imported[10].default,
-    "recommend-catalog-app": imported[11].default,
-    "reorder-catalog-apps": imported[12].default,
-    "start-prototype-trial": imported[13].default,
-    "submit-consultation": imported[14].default,
-    "update-catalog-app": imported[15].default,
-    "update-lead": imported[16].default,
-    "update-prototype-trial": imported[17].default,
-    "upload-catalog-cover": imported[18].default,
+    "list-my-prototype-trials": imported[7].default,
+    "list-catalog-apps-admin": imported[8].default,
+    "list-catalog-apps": imported[9].default,
+    "list-leads": imported[10].default,
+    "list-prototype-trials-admin": imported[11].default,
+    "recommend-catalog-app": imported[12].default,
+    "reorder-catalog-apps": imported[13].default,
+    "save-prototype-trial": imported[14].default,
+    "start-prototype-trial": imported[15].default,
+    "submit-consultation": imported[16].default,
+    "update-catalog-app": imported[17].default,
+    "update-lead": imported[18].default,
+    "update-prototype-trial": imported[19].default,
+    "upload-catalog-cover": imported[20].default,
   };
 });
 
@@ -509,6 +514,47 @@ describe("RakitApp catalog administration actions", () => {
 });
 
 describe("RakitApp prototype actions", () => {
+  it("saves an anonymous prototype to an account and lists only that account's prototypes", async () => {
+    const started = await action("start-prototype-trial").run({ intake });
+
+    const saved = await action("save-prototype-trial").run(
+      { trialToken: started.trialToken },
+      { userEmail: " Guru@Example.com " },
+    );
+    expect(saved).toEqual({ saved: true, trialToken: started.trialToken });
+
+    const own = await action("list-my-prototype-trials").run(
+      {},
+      { userEmail: "guru@example.com" },
+    );
+    expect(own).toHaveLength(1);
+    expect(own[0]).toMatchObject({
+      trialToken: started.trialToken,
+      brief: { idea: intake.idea },
+    });
+
+    const other = await action("list-my-prototype-trials").run(
+      {},
+      { userEmail: "other@example.com" },
+    );
+    expect(other).toEqual([]);
+  });
+
+  it("prevents a prototype from being claimed by another account", async () => {
+    const started = await action("start-prototype-trial").run({ intake });
+    await action("save-prototype-trial").run(
+      { trialToken: started.trialToken },
+      { userEmail: "first@example.com" },
+    );
+
+    await expect(
+      action("save-prototype-trial").run(
+        { trialToken: started.trialToken },
+        { userEmail: "second@example.com" },
+      ),
+    ).rejects.toThrow("tersimpan di akun lain");
+  });
+
   it("creates, reads, activates, and lists a prototype trial", async () => {
     const started = await action("start-prototype-trial").run({ intake });
     expect(started).toMatchObject({ phase: "requested", trialHours: 24 });

@@ -21,6 +21,7 @@ export const projectLeads = table("project_leads", {
 export const prototypeTrials = table("prototype_trials", {
   id: text("id").primaryKey(),
   brief: text("brief").notNull(),
+  ownerEmail: text("owner_email"),
   status: text("status", {
     enum: ["active", "expired"],
   })

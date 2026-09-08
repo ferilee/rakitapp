@@ -119,6 +119,11 @@ ALTER TABLE prototype_trials ADD COLUMN updated_at TEXT NOT NULL DEFAULT '';
 UPDATE prototype_trials SET updated_at = created_at WHERE updated_at = '';
 CREATE INDEX IF NOT EXISTS prototype_trials_phase_updated_idx ON prototype_trials (phase, updated_at);`,
     },
+    {
+      version: 10,
+      name: "rakitapp-prototype-trial-owners",
+      sql: "ALTER TABLE prototype_trials ADD COLUMN owner_email TEXT;\nCREATE INDEX IF NOT EXISTS prototype_trials_owner_email_idx ON prototype_trials (owner_email);",
+    },
   ],
   { table: "rakitapp_migrations" },
 );

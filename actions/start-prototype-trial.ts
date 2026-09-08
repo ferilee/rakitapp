@@ -13,7 +13,7 @@ export default defineAction({
   requiresAuth: false,
   agentTool: false,
   maxBodyBytes: 64 * 1024,
-  run: async ({ intake }) => {
+  run: async ({ intake }, ctx) => {
     const createdAt = new Date();
     const trialToken = crypto.randomUUID();
     const brief = buildProjectBrief(intake);
@@ -24,6 +24,7 @@ export default defineAction({
       .values({
         id: trialToken,
         brief: JSON.stringify(brief),
+        ownerEmail: ctx?.userEmail ?? null,
         phase: "requested",
         status: "active",
         createdAt: now,

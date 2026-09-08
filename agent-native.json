@@ -2,8 +2,7 @@
   "doctor": {
     "dbToolScopingDenylist": {
       "project_leads": "Internal RakitApp operator leads are accessed only through authenticated lead actions; they are not tenant-facing raw DB data.",
-      "catalog_apps": "Global public catalog configuration is accessed through published catalog actions; it is not tenant-owned raw DB data.",
-      "prototype_trials": "Public prototype sessions are intentionally addressed by an opaque expiry token before login; they contain only a generated brief and sample data, and are accessed through the prototype actions."
+      "catalog_apps": "Global public catalog configuration is accessed through published catalog actions; it is not tenant-owned raw DB data."
     },
     "failOnBuild": true
   }

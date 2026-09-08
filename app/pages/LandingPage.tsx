@@ -105,6 +105,9 @@ function draftDuration(app: ShowcaseApp) {
 
 export function LandingPage() {
   const [demoApp, setDemoApp] = useState<ShowcaseApp | null>(null);
+  const [savedPrototypeToken, setSavedPrototypeToken] = useState<string | null>(
+    null,
+  );
   const [draftApps, setDraftApps] = useState<ShowcaseApp[]>([]);
   const [activeDraftIndex, setActiveDraftIndex] = useState(0);
   const [isDraftPaused, setIsDraftPaused] = useState(false);
@@ -120,6 +123,15 @@ export function LandingPage() {
     draftApps[activeDraftIndex] ??
     apps.find((app) => app.id === "smartclass") ??
     apps[0];
+
+  useEffect(() => {
+    const stored = JSON.parse(
+      window.localStorage.getItem("rakitapp-prototype-tokens") ?? "[]",
+    ) as unknown;
+    if (Array.isArray(stored) && typeof stored[0] === "string") {
+      setSavedPrototypeToken(stored[0]);
+    }
+  }, []);
 
   useEffect(() => {
     setDraftApps(pickDraftApps(apps));
@@ -187,6 +199,14 @@ export function LandingPage() {
             >
               Katalog aplikasi
             </Link>
+            {savedPrototypeToken ? (
+              <Link
+                to={`/prototype/${savedPrototypeToken}`}
+                className="public-neon-link hidden rounded-full px-4 py-2 text-sm font-medium md:inline-flex"
+              >
+                Lanjutkan prototype
+              </Link>
+            ) : null}
             <Link
               to="/build"
               className="public-neon-link hidden items-center gap-2 rounded-full border border-slate-500/40 bg-slate-900/50 px-4 py-2 text-sm font-medium sm:flex"
