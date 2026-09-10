@@ -5,9 +5,11 @@ import {
   CATEGORY_IDS,
   getCategory,
   getSelectedFeatures,
+  SCOPE_OPTIONS,
   type AudienceId,
   type CategoryId,
   type ProjectIntake,
+  type ScopeId,
 } from "@shared/catalog";
 import { getPackageDetails } from "@shared/showcase";
 import type { ProjectBrief } from "@shared/types";
@@ -40,7 +42,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const steps = ["Ide", "Jenis aplikasi", "Pengguna", "Fitur"];
+const steps = ["Ide", "Jenis aplikasi", "Cakupan", "Pengguna", "Fitur"];
 
 const categoryAccent: Record<CategoryId, string> = {
   lms: "cyan",
@@ -85,6 +87,7 @@ const PROBLEM_PATHS = [
     recommendation: {
       name: "Kelas Digital",
       categoryId: "lms" as const,
+      scope: "single-class" as ScopeId,
       audience: ["teacher", "student"] as AudienceId[],
       featureIds: ["learning-materials", "quiz-engine", "teacher-dashboard"],
       idea: "Saya ingin siswa bisa belajar dari HP dengan materi, kuis, dan kemajuan yang mudah dipantau.",
@@ -99,6 +102,7 @@ const PROBLEM_PATHS = [
     recommendation: {
       name: "Kuis & Asesmen",
       categoryId: "assessment" as const,
+      scope: "single-class" as ScopeId,
       audience: ["teacher", "student"] as AudienceId[],
       featureIds: ["question-bank", "quiz-engine", "leaderboard"],
       idea: "Saya ingin siswa mengerjakan soal dari HP dan nilainya langsung masuk ke rekap guru.",
@@ -113,6 +117,7 @@ const PROBLEM_PATHS = [
     recommendation: {
       name: "Administrasi Sekolah",
       categoryId: "school-operations" as const,
+      scope: "school" as ScopeId,
       audience: ["teacher", "admin"] as AudienceId[],
       featureIds: ["auth-roles", "reports-export", "notifications"],
       idea: "Saya ingin pekerjaan administrasi sekolah lebih rapi dan laporan bisa dibuat tanpa menghitung ulang.",
@@ -127,6 +132,7 @@ const PROBLEM_PATHS = [
     recommendation: {
       name: "Presensi Sekolah",
       categoryId: "school-operations" as const,
+      scope: "single-class" as ScopeId,
       audience: ["teacher", "admin"] as AudienceId[],
       featureIds: ["auth-roles", "attendance", "reports-export"],
       idea: "Saya ingin guru mencatat kehadiran siswa dari HP dan rekapnya langsung terlihat.",
@@ -141,6 +147,7 @@ const PROBLEM_PATHS = [
     recommendation: {
       name: "PortofolioKu",
       categoryId: "personal-web" as const,
+      scope: "personal" as ScopeId,
       audience: ["teacher"] as AudienceId[],
       featureIds: ["personal-profile", "portfolio-gallery", "contact-links"],
       idea: "Saya ingin memiliki website portofolio untuk menampilkan karya, pengalaman, dan kontak saya.",
@@ -155,6 +162,7 @@ const PROBLEM_PATHS = [
     recommendation: {
       name: "Website Profil Sekolah",
       categoryId: "school-operations" as const,
+      scope: "school" as ScopeId,
       audience: ["admin", "parent"] as AudienceId[],
       featureIds: ["auth-roles", "notifications", "reports-export"],
       idea: "Saya ingin sekolah memiliki website yang menampilkan profil, layanan, informasi, dan pengumuman.",
@@ -177,7 +185,13 @@ function formatBriefName(value: string) {
 }
 
 function newIntake(): ProjectIntake {
-  return { idea: "", categoryId: "lms", audience: ["teacher"], featureIds: [] };
+  return {
+    idea: "",
+    categoryId: "lms",
+    scope: "single-class",
+    audience: ["teacher"],
+    featureIds: [],
+  };
 }
 
 export function BuilderPage() {
@@ -242,6 +256,7 @@ export function BuilderPage() {
     updateIntake({
       idea: problem.recommendation.idea,
       categoryId: problem.recommendation.categoryId,
+      scope: problem.recommendation.scope,
       audience: problem.recommendation.audience,
       featureIds: [...problem.recommendation.featureIds],
     });
@@ -253,6 +268,7 @@ export function BuilderPage() {
     updateIntake({
       idea: "",
       categoryId: "lms",
+      scope: "single-class",
       audience: ["teacher"],
       featureIds: [],
     });
@@ -271,7 +287,7 @@ export function BuilderPage() {
       return;
     }
     if (idea !== intake.idea) updateIntake({ idea });
-    if (step === 2 && intake.audience.length === 0) return;
+    if (step === 3 && intake.audience.length === 0) return;
     setStep((current) => Math.min(current + 1, steps.length - 1));
   }
 
@@ -548,6 +564,41 @@ export function BuilderPage() {
           ) : null}
           {step === 2 ? (
             <StepFrame
+              eyebrow="Tentukan cakupan"
+              title="Aplikasi ini akan dipakai sampai sejauh mana?"
+              description="Cakupan penggunaan membantu kami memberi estimasi yang sesuai. Kuis untuk satu guru dan satu kelas tidak perlu memakai harga aplikasi sekolah."
+            >
+              <div className="grid gap-3 sm:grid-cols-2">
+                {SCOPE_OPTIONS.map((option) => {
+                  const selected = intake.scope === option.id;
+                  return (
+                    <button
+                      type="button"
+                      key={option.id}
+                      onClick={() => updateIntake({ scope: option.id })}
+                      data-selected={selected}
+                      className="public-neon-option public-neon-option-violet rounded-2xl border p-5 text-left"
+                    >
+                      <span className="flex items-center justify-between gap-3 font-semibold text-white">
+                        {option.label}
+                        {selected ? (
+                          <IconCheck className="size-5 text-cyan-300" />
+                        ) : null}
+                      </span>
+                      <span className="mt-2 block text-sm font-medium text-cyan-200">
+                        {option.priceHint}
+                      </span>
+                      <span className="public-neon-muted mt-1 block text-sm leading-6">
+                        {option.description}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </StepFrame>
+          ) : null}
+          {step === 3 ? (
+            <StepFrame
               eyebrow="Kenali pengguna"
               title="Siapa yang akan memakai aplikasi ini?"
               description="Pilih satu atau beberapa peran pengguna."
@@ -573,7 +624,7 @@ export function BuilderPage() {
               </div>
             </StepFrame>
           ) : null}
-          {step === 3 ? (
+          {step === 4 ? (
             <StepFrame
               eyebrow={category.label}
               title="Fitur apa yang dibutuhkan?"
@@ -717,6 +768,7 @@ function BriefPage({
       "Halo RakitApp, saya ingin konsultasi rancangan aplikasi.",
       "Nama sementara: " + formatBriefName(brief.temporaryName),
       "Jenis aplikasi: " + brief.categoryLabel,
+      "Cakupan: " + brief.scopeLabel,
       "Estimasi: " +
         formatCurrency(brief.estimate.priceMin) +
         " - " +
@@ -761,6 +813,7 @@ function BriefPage({
                   label="Jenis aplikasi"
                   value={brief.categoryLabel}
                 />
+                <SummaryItem label="Cakupan" value={brief.scopeLabel} />
                 <SummaryItem
                   label="Pengguna"
                   value={brief.audienceLabels.join(", ")}
@@ -815,8 +868,10 @@ function BriefPage({
                   </div>
                 </div>
                 <p className="public-neon-muted mt-5 text-xs leading-5">
-                  Kisaran awal untuk scope MVP. Harga final dibahas bersama tim
-                  setelah kebutuhan dikonfirmasi.
+                  Estimasi ini mengikuti cakupan{" "}
+                  {brief.scopeLabel.toLocaleLowerCase("id-ID")} dan scope MVP.
+                  Harga final dibahas bersama tim setelah kebutuhan
+                  dikonfirmasi.
                 </p>
                 <div className="mt-6 border-t border-white/10 pt-5">
                   <p className="text-sm font-semibold text-cyan-100">
@@ -865,7 +920,8 @@ function BriefPage({
                 </Button>
                 <p className="mt-2 text-[0.7rem] leading-5 text-slate-500">
                   Masa coba dimulai setelah tim mengaktifkan prototype: 8 jam
-                  untuk aplikasi personal atau 24 jam untuk aplikasi sekolah.
+                  untuk cakupan personal atau satu kelas, dan 24 jam untuk
+                  cakupan beberapa kelas atau seluruh sekolah.
                 </p>
               </CardContent>
             </Card>

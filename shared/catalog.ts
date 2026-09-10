@@ -14,6 +14,15 @@ export const AUDIENCE_IDS = ["teacher", "student", "admin", "parent"] as const;
 
 export type AudienceId = (typeof AUDIENCE_IDS)[number];
 
+export const SCOPE_IDS = [
+  "personal",
+  "single-class",
+  "multi-class",
+  "school",
+] as const;
+
+export type ScopeId = (typeof SCOPE_IDS)[number];
+
 export const PERSONAL_APP_PRICE_RANGE = {
   min: 100_000,
   max: 300_000,
@@ -23,6 +32,38 @@ export const SCHOOL_APP_PRICE_RANGE = {
   min: 1_000_000,
   max: 5_000_000,
 } as const;
+
+export const SCOPE_OPTIONS: ReadonlyArray<{
+  id: ScopeId;
+  label: string;
+  description: string;
+  priceHint: string;
+}> = [
+  {
+    id: "personal",
+    label: "Saya sendiri",
+    description: "Alat bantu pribadi untuk satu guru atau satu pengguna utama.",
+    priceHint: "Rp100–300 ribuan",
+  },
+  {
+    id: "single-class",
+    label: "Satu kelas",
+    description: "Dipakai guru bersama siswa dalam satu kelas atau rombel.",
+    priceHint: "Mulai Rp300 ribuan",
+  },
+  {
+    id: "multi-class",
+    label: "Beberapa kelas",
+    description: "Dipakai untuk beberapa kelas dengan rekap yang lebih luas.",
+    priceHint: "Mulai Rp500 ribuan",
+  },
+  {
+    id: "school",
+    label: "Seluruh sekolah",
+    description: "Dipakai lintas kelas dan peran untuk kebutuhan sekolah.",
+    priceHint: "Rp1–5 jutaan",
+  },
+];
 
 export interface FeatureDefinition {
   id: string;
@@ -296,6 +337,9 @@ export const CATEGORY_CATALOG: Record<CategoryId, CategoryDefinition> = {
 export const projectIntakeSchema = z.object({
   idea: z.string().trim().min(3).max(400),
   categoryId: z.enum(CATEGORY_IDS),
+  // Default keeps old shared links and saved drafts compatible. New builder
+  // sessions always send the scope selected by the client.
+  scope: z.enum(SCOPE_IDS).default("school"),
   audience: z.array(z.enum(AUDIENCE_IDS)).min(1).max(4),
   featureIds: z.array(z.string().min(1)).max(30),
 });

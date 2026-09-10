@@ -1,5 +1,6 @@
 import { ForbiddenError } from "@agent-native/core/sharing";
 
+import { SCOPE_OPTIONS, type ScopeId } from "../../shared/catalog.js";
 import type { ProjectBrief, ProjectLeadSummary } from "../../shared/types.js";
 import type { schema } from "../db/index.js";
 
@@ -32,7 +33,19 @@ export function assertOperator(userEmail: string | undefined) {
 
 export function parseProjectBrief(value: string): ProjectBrief {
   try {
-    return JSON.parse(value) as ProjectBrief;
+    const brief = JSON.parse(value) as Partial<ProjectBrief> & {
+      categoryId: string;
+    };
+    const scope = (brief.scope ??
+      (brief.categoryId === "personal-web" ? "personal" : "school")) as ScopeId;
+    return {
+      ...brief,
+      scope,
+      scopeLabel:
+        brief.scopeLabel ??
+        SCOPE_OPTIONS.find((option) => option.id === scope)?.label ??
+        scope,
+    } as ProjectBrief;
   } catch {
     throw new Error("The saved project brief is invalid.");
   }

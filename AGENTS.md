@@ -23,7 +23,7 @@ internal agent surface and `/agent` remains the framework's agent settings.
 
 ## Domain actions
 
-- `generate-project-brief` turns `idea`, `categoryId`, `audience`, and
+- `generate-project-brief` turns `idea`, `categoryId`, `scope`, `audience`, and
   `featureIds` into the structured brief shown by the builder.
 - `calculate-project-estimate` returns the indicative price, duration,
   complexity, points, and assumptions.
@@ -32,8 +32,9 @@ internal agent surface and `/agent` remains the framework's agent settings.
 - `start-prototype-trial` creates a public prototype request from a brief. The
   team attaches the real application's URL before the request becomes live.
 - `get-prototype-trial` reads a prototype request by its opaque token. A trial
-  lasts 8 hours for personal applications or 24 hours for school applications,
-  starting when an operator activates the live URL.
+  lasts 8 hours for personal or one-class applications, or 24 hours for
+  multi-class and school-wide applications, starting when an operator
+  activates the live URL.
 - `list-prototype-trials-admin` and `update-prototype-trial` let authenticated
   operators manage the build phase, live URL, and activation timer.
 - `list-leads` and `get-lead` are authenticated operator reads.
@@ -60,10 +61,12 @@ outbound notification or consequential change.
 
 ## Estimate policy
 
-The feature catalog is in `shared/catalog.ts` and the calculation is in
-`shared/estimator.ts`. Prices and durations are editable configuration, not a
-contract. Add or change a feature there with a user-facing label, description,
-and weight, then update the estimator tests.
+The feature catalog and usage scopes are in `shared/catalog.ts` and the
+calculation is in `shared/estimator.ts`. Prices and durations are editable
+configuration, not a contract. The scope distinguishes a personal tool, one
+class, several classes, and a school-wide application; the application type
+alone must not force a school-wide price. Add or change a feature there with a
+user-facing label, description, and weight, then update the estimator tests.
 
 ## Application state
 

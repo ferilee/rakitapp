@@ -468,7 +468,9 @@ export function LandingPage() {
             </div>
             <p className="public-neon-muted max-w-md text-sm leading-6 sm:text-right">
               Harga ini adalah kisaran awal agar Anda bisa memilih jalur yang
-              sesuai kemampuan sebelum berkonsultasi.
+              sesuai kemampuan sebelum berkonsultasi. Jenis aplikasi tidak
+              otomatis menentukan harga; cakupan pemakaian dan kompleksitas
+              fitur ikut diperhitungkan.
             </p>
           </div>
           <div className="mt-8 grid gap-5 lg:grid-cols-3">

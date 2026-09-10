@@ -3,6 +3,7 @@ import type {
   CategoryId,
   FeatureDefinition,
   ProjectIntake,
+  ScopeId,
 } from "./catalog.js";
 
 export type ProjectComplexity = "sederhana" | "menengah" | "kompleks";
@@ -22,6 +23,8 @@ export interface ProjectBrief {
   idea: string;
   categoryId: CategoryId;
   categoryLabel: string;
+  scope: ScopeId;
+  scopeLabel: string;
   audience: AudienceId[];
   audienceLabels: string[];
   features: FeatureDefinition[];

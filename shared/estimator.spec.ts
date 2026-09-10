@@ -8,6 +8,7 @@ describe("RakitApp project estimator", () => {
     const intake = {
       idea: "Kelas kuis untuk siswa sekolah",
       categoryId: "assessment",
+      scope: "school",
       audience: ["teacher", "student"],
       featureIds: ["auth-roles", "question-bank", "quiz-engine"],
     } satisfies ProjectIntake;
@@ -18,9 +19,9 @@ describe("RakitApp project estimator", () => {
     expect(first).toEqual(second);
     expect(first.priceMin).toBe(2_200_000);
     expect(first.priceMax).toBe(4_200_000);
-    expect(first.daysMin).toBe(40);
-    expect(first.daysMax).toBe(78);
-    expect(first.complexity).toBe("menengah");
+    expect(first.daysMin).toBe(50);
+    expect(first.daysMax).toBe(98);
+    expect(first.complexity).toBe("kompleks");
     expect(first.assumptions[0]).toMatch(/indikatif/);
   });
 
@@ -28,6 +29,7 @@ describe("RakitApp project estimator", () => {
     const estimate = calculateProjectEstimate({
       idea: "Pusat belajar adaptif",
       categoryId: "lms",
+      scope: "school",
       audience: ["teacher", "student", "admin", "parent"],
       featureIds: [
         "auth-roles",
@@ -39,7 +41,7 @@ describe("RakitApp project estimator", () => {
     });
 
     expect(estimate.complexity).toBe("kompleks");
-    expect(estimate.points).toBe(18);
+    expect(estimate.points).toBe(23);
     expect(estimate.priceMax).toBe(5_000_000);
     expect(estimate.assumptions).toContain(
       "Peran pengguna tambahan menambah kebutuhan hak akses dan pengujian.",
@@ -50,6 +52,7 @@ describe("RakitApp project estimator", () => {
     const brief = buildProjectBrief({
       idea: "Bank soal matematika",
       categoryId: "assessment",
+      scope: "school",
       audience: ["teacher", "student"],
       featureIds: ["question-bank", "unknown-feature"],
     });
@@ -66,6 +69,7 @@ describe("RakitApp project estimator", () => {
     const estimate = calculateProjectEstimate({
       idea: "Website portofolio pribadi",
       categoryId: "personal-web",
+      scope: "personal",
       audience: ["teacher"],
       featureIds: [
         "personal-profile",
@@ -84,6 +88,7 @@ describe("RakitApp project estimator", () => {
     const estimate = calculateProjectEstimate({
       idea: "Website pribadi untuk guru",
       categoryId: "personal-web",
+      scope: "personal",
       audience: ["teacher", "student", "admin", "parent"],
       featureIds: [
         "personal-profile",
@@ -96,5 +101,21 @@ describe("RakitApp project estimator", () => {
 
     expect(estimate.priceMin).toBe(300_000);
     expect(estimate.priceMax).toBe(300_000);
+  });
+
+  it("prices a teacher quiz for one class below the school-app tier", () => {
+    const estimate = calculateProjectEstimate({
+      idea: "Kuis interaktif untuk siswa kelas saya",
+      categoryId: "assessment",
+      scope: "single-class",
+      audience: ["teacher", "student"],
+      featureIds: ["question-bank", "quiz-engine"],
+    });
+
+    expect(estimate.priceMin).toBe(700_000);
+    expect(estimate.priceMax).toBe(900_000);
+    expect(estimate.assumptions).toContain(
+      "Estimasi mengikuti cakupan penggunaan: Satu kelas.",
+    );
   });
 });

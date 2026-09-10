@@ -84,6 +84,7 @@ describe("RakitApp shared helper functions", () => {
       getSelectedFeatures({
         idea: "Website portofolio pribadi",
         categoryId: "personal-web",
+        scope: "personal",
         audience: ["teacher"],
         featureIds: ["contact-links", "missing-feature"],
       }).map((feature) => feature.id),

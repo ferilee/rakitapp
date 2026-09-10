@@ -30,8 +30,13 @@ export interface PrototypeTrial {
   trialHours: number;
 }
 
-export function prototypeTrialHoursForCategory(categoryId: string): number {
-  return categoryId === "personal-web"
+export function prototypeTrialHoursForCategory(
+  categoryId: string,
+  scope?: string,
+): number {
+  return scope === "personal" ||
+    scope === "single-class" ||
+    categoryId === "personal-web"
     ? PERSONAL_PROTOTYPE_TRIAL_HOURS
     : SCHOOL_PROTOTYPE_TRIAL_HOURS;
 }

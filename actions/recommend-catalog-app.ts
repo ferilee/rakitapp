@@ -8,6 +8,7 @@ import {
   CATEGORY_IDS,
   type AudienceId,
   type CategoryId,
+  type ScopeId,
 } from "../shared/catalog.js";
 import { buildProjectBrief } from "../shared/estimator.js";
 
@@ -20,6 +21,7 @@ type ContentProfile = {
   id: string;
   signals: string[];
   categoryId: CategoryId;
+  scope: ScopeId;
   audience: AudienceId[];
   name: string;
   featureIds: string[];
@@ -41,6 +43,7 @@ const contentProfiles: ContentProfile[] = [
       "refleksi pembelajaran",
     ],
     categoryId: "lms",
+    scope: "personal",
     audience: ["teacher"],
     name: "Jurnal Mengajar",
     featureIds: ["auth-roles", "learning-materials", "teacher-dashboard"],
@@ -66,6 +69,7 @@ const contentProfiles: ContentProfile[] = [
       "rekap kehadiran",
     ],
     categoryId: "school-operations",
+    scope: "school",
     audience: ["teacher", "admin"],
     name: "Presensi Sekolah",
     featureIds: ["auth-roles", "attendance", "reports-export"],
@@ -81,6 +85,7 @@ const contentProfiles: ContentProfile[] = [
     id: "personal-portfolio",
     signals: ["portofolio", "portfolio", "galeri karya", "karya pribadi"],
     categoryId: "personal-web",
+    scope: "personal",
     audience: ["teacher"],
     name: "PortofolioKu",
     featureIds: ["personal-profile", "portfolio-gallery", "contact-links"],
@@ -106,6 +111,7 @@ const contentProfiles: ContentProfile[] = [
       "situs pribadi",
     ],
     categoryId: "personal-web",
+    scope: "personal",
     audience: ["teacher"],
     name: "Website Pribadi",
     featureIds: ["personal-profile", "contact-links", "custom-domain"],
@@ -125,6 +131,7 @@ const contentProfiles: ContentProfile[] = [
     id: "personal-blog",
     signals: ["blog pribadi", "blog guru", "catatan pribadi", "menulis"],
     categoryId: "personal-web",
+    scope: "personal",
     audience: ["teacher"],
     name: "BlogPribadi",
     featureIds: ["personal-profile", "personal-blog", "contact-links"],
@@ -140,6 +147,7 @@ const contentProfiles: ContentProfile[] = [
     id: "personal-linkbio",
     signals: ["linkbio", "link in bio", "tautan bio", "kumpulan tautan"],
     categoryId: "personal-web",
+    scope: "personal",
     audience: ["teacher"],
     name: "LinkBio",
     featureIds: ["personal-profile", "contact-links", "custom-domain"],
@@ -290,6 +298,37 @@ function chooseAudience(
   return ["teacher"] as AudienceId[];
 }
 
+function chooseScope(
+  context: string,
+  categoryId: CategoryId,
+  profile: ContentProfile | null,
+): ScopeId {
+  if (profile) return profile.scope;
+  if (categoryId === "personal-web") return "personal";
+
+  const text = normalize(context);
+  if (
+    [
+      "seluruh sekolah",
+      "sekolah",
+      "operator",
+      "admin",
+      "orang tua",
+      "yayasan",
+    ].some((signal) => includesSignal(text, signal))
+  ) {
+    return "school";
+  }
+  if (
+    ["beberapa kelas", "banyak kelas", "lintas kelas", "semua kelas"].some(
+      (signal) => includesSignal(text, signal),
+    )
+  ) {
+    return "multi-class";
+  }
+  return "single-class";
+}
+
 function chooseFeatures(
   context: string,
   categoryId: CategoryId,
@@ -411,11 +450,13 @@ export default defineAction({
     const context = `${preferredName ?? ""} ${idea}`.trim();
     const profile = findContentProfile(context);
     const categoryId = chooseCategory(context, profile);
+    const scope = chooseScope(context, categoryId, profile);
     const audience = chooseAudience(context, categoryId, profile);
     const features = chooseFeatures(context, categoryId, profile);
     const brief = buildProjectBrief({
       idea,
       categoryId,
+      scope,
       audience,
       featureIds: features.map((feature) => feature.id),
     });
@@ -439,6 +480,7 @@ export default defineAction({
       id: slugify(name) || "aplikasi-baru",
       name,
       category: category.label,
+      scope,
       audience: audienceText,
       summary: limitSummary(summary),
       description,
@@ -454,8 +496,8 @@ export default defineAction({
       status: "draft" as const,
       sortOrder: "0",
       rationale: profile
-        ? `Profil kebutuhan "${profile.id}" dipilih dari nama dan ide aplikasi. Konten disusun agar tetap fokus pada scope MVP dan harga sesuai segmen ${categoryId === "personal-web" ? "aplikasi pribadi Rp100.000–Rp300.000" : "aplikasi sekolah Rp1.000.000–Rp5.000.000"}. Estimasi tetap perlu ditinjau sebelum ditawarkan ke pelanggan.`
-        : `Kategori dipilih dari kata kunci nama dan ide. ${features.length} fitur inti dipilih agar draft tetap fokus pada scope MVP dengan target harga ${categoryId === "personal-web" ? "aplikasi pribadi Rp100.000–Rp300.000" : "aplikasi sekolah Rp1.000.000–Rp5.000.000"}. Estimasi tetap perlu ditinjau sebelum ditawarkan ke pelanggan.`,
+        ? `Profil kebutuhan "${profile.id}" dipilih dari nama dan ide aplikasi. Konten disusun untuk cakupan ${scope} dengan scope MVP yang terjangkau. Estimasi tetap perlu ditinjau sebelum ditawarkan ke pelanggan.`
+        : `Kategori dan cakupan ${scope} dipilih dari kata kunci nama dan ide. ${features.length} fitur inti dipilih agar draft tetap fokus pada scope MVP yang terjangkau. Estimasi tetap perlu ditinjau sebelum ditawarkan ke pelanggan.`,
     };
   },
 });

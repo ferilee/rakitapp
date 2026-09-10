@@ -43,6 +43,7 @@ const operator = { userEmail: "operator@example.com" };
 const intake: ProjectIntake = {
   idea: "Aplikasi jurnal mengajar untuk guru",
   categoryId: "lms",
+  scope: "school",
   audience: ["teacher"],
   featureIds: ["auth-roles", "learning-materials", "teacher-dashboard"],
 };
@@ -258,6 +259,7 @@ describe("RakitApp public planning actions", () => {
       ...intake,
       idea: "Website portofolio pribadi",
       categoryId: "personal-web" as const,
+      scope: "personal",
       featureIds: ["personal-profile"],
     };
     const estimate = await action("calculate-project-estimate").run(personal);
@@ -323,8 +325,10 @@ describe("RakitApp recommendation and consultation actions", () => {
     expect(result).toMatchObject({
       name: "Jurnal Mengajar",
       category: "LMS & Kelas Digital",
+      scope: "personal",
       status: "draft",
     });
+    expect(Number(result.priceMax)).toBeLessThanOrEqual(300_000);
     expect(result.summary).toContain("mencatat kegiatan mengajar");
     expect(result.description).toContain("jurnal digital untuk guru");
     expect(result.rationale).toContain("teaching-journal");

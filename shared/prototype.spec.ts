@@ -12,6 +12,10 @@ describe("prototype trial policy", () => {
   it("uses a shorter trial for personal applications", () => {
     expect(prototypeTrialHoursForCategory("personal-web")).toBe(8);
     expect(prototypeTrialHoursForCategory("lms")).toBe(24);
+    expect(prototypeTrialHoursForCategory("assessment", "single-class")).toBe(
+      8,
+    );
+    expect(prototypeTrialHoursForCategory("assessment", "school")).toBe(24);
   });
 
   it("expires exactly 24 hours after it starts", () => {

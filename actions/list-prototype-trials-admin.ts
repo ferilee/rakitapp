@@ -41,7 +41,10 @@ export default defineAction({
         trialExpiresAt: row.trialExpiresAt,
         archivedAt: row.archivedAt,
         isTestData: row.isTestData,
-        trialHours: prototypeTrialHoursForCategory(brief.categoryId),
+        trialHours: prototypeTrialHoursForCategory(
+          brief.categoryId,
+          brief.scope,
+        ),
       };
     });
   },

@@ -49,7 +49,7 @@ export default defineAction({
       activatedAt: null,
       trialExpiresAt: null,
       updatedAt: now,
-      trialHours: prototypeTrialHoursForCategory(brief.categoryId),
+      trialHours: prototypeTrialHoursForCategory(brief.categoryId, brief.scope),
     };
   },
 });

@@ -41,7 +41,7 @@ export default defineAction({
     const now = new Date();
     const nowIso = now.toISOString();
     const brief = parseProjectBrief(existing.brief);
-    const hours = prototypeTrialHoursForCategory(brief.categoryId);
+    const hours = prototypeTrialHoursForCategory(brief.categoryId, brief.scope);
     const activation = phase === "active";
     const trialExpiresAt = activation
       ? createPrototypeExpiry(now, hours)

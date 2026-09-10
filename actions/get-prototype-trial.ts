@@ -3,12 +3,12 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDb, schema } from "../server/db/index.js";
+import { parseProjectBrief } from "../server/lib/leads.js";
 import {
   getPrototypeTrialStatus,
   prototypeTrialHoursForCategory,
   type PrototypeTrialPhase,
 } from "../shared/prototype.js";
-import type { ProjectBrief } from "../shared/types.js";
 
 const prototypeTrialSchema = z.object({
   trialToken: z.string().uuid(),
@@ -42,7 +42,7 @@ export default defineAction({
       }
       return row.phase;
     })();
-    const brief = JSON.parse(row.brief) as ProjectBrief;
+    const brief = parseProjectBrief(row.brief);
     return {
       trialToken: row.id,
       brief,
@@ -56,7 +56,7 @@ export default defineAction({
       archivedAt: row.archivedAt,
       isTestData: row.isTestData,
       updatedAt: row.updatedAt,
-      trialHours: prototypeTrialHoursForCategory(brief.categoryId),
+      trialHours: prototypeTrialHoursForCategory(brief.categoryId, brief.scope),
     };
   },
 });
