@@ -701,7 +701,12 @@ export function LandingPage() {
 
         <footer className="public-neon-muted flex flex-col gap-3 border-t border-slate-700/60 py-5 text-sm sm:flex-row sm:items-center sm:justify-between">
           <span>Dari masalah → solusi → aplikasi siap digunakan.</span>
-          <span>RakitApp Studio</span>
+          <div className="flex items-center gap-4 sm:gap-5">
+            <span>RakitApp Studio</span>
+            <Link to="/admin" className="public-neon-link text-xs font-medium">
+              Akses admin
+            </Link>
+          </div>
         </footer>
       </div>
       <CatalogDemoDialog
