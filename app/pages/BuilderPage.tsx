@@ -566,7 +566,7 @@ export function BuilderPage() {
             <StepFrame
               eyebrow="Tentukan cakupan"
               title="Aplikasi ini akan dipakai sampai sejauh mana?"
-              description="Cakupan penggunaan membantu kami memberi estimasi yang sesuai. Kuis untuk satu guru dan satu kelas tidak perlu memakai harga aplikasi sekolah."
+              description="Cakupan penggunaan membantu kami memberi estimasi yang sesuai. Nominal baru ditampilkan setelah fitur utama Anda pilih."
             >
               <div className="grid gap-3 sm:grid-cols-2">
                 {SCOPE_OPTIONS.map((option) => {
@@ -584,9 +584,6 @@ export function BuilderPage() {
                         {selected ? (
                           <IconCheck className="size-5 text-cyan-300" />
                         ) : null}
-                      </span>
-                      <span className="mt-2 block text-sm font-medium text-cyan-200">
-                        {option.priceHint}
                       </span>
                       <span className="public-neon-muted mt-1 block text-sm leading-6">
                         {option.description}
@@ -698,7 +695,7 @@ export function BuilderPage() {
               ) : (
                 <IconSparkles className="size-4" />
               )}
-              {generateBrief.isPending ? "Menyusun..." : "Lihat rancangan"}
+              {generateBrief.isPending ? "Menyusun..." : "Lihat estimasi awal"}
             </Button>
           )}
         </footer>

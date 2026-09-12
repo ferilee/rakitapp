@@ -37,31 +37,26 @@ export const SCOPE_OPTIONS: ReadonlyArray<{
   id: ScopeId;
   label: string;
   description: string;
-  priceHint: string;
 }> = [
   {
     id: "personal",
     label: "Saya sendiri",
     description: "Alat bantu pribadi untuk satu guru atau satu pengguna utama.",
-    priceHint: "Rp100–300 ribuan",
   },
   {
     id: "single-class",
     label: "Satu kelas",
     description: "Dipakai guru bersama siswa dalam satu kelas atau rombel.",
-    priceHint: "Mulai Rp300 ribuan",
   },
   {
     id: "multi-class",
     label: "Beberapa kelas",
     description: "Dipakai untuk beberapa kelas dengan rekap yang lebih luas.",
-    priceHint: "Mulai Rp500 ribuan",
   },
   {
     id: "school",
     label: "Seluruh sekolah",
     description: "Dipakai lintas kelas dan peran untuk kebutuhan sekolah.",
-    priceHint: "Rp1–5 jutaan",
   },
 ];
 

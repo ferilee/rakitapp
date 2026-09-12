@@ -191,7 +191,7 @@ export function LandingPage() {
               href="#harga"
               className="public-neon-link hidden rounded-full px-4 py-2 text-sm font-medium lg:inline-flex"
             >
-              Harga
+              Jalur solusi
             </a>
             <Link
               to="/catalog"
@@ -457,20 +457,19 @@ export function LandingPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="public-neon-badge inline-flex rounded-full px-3 py-1.5 text-sm font-medium">
-                Harga sederhana
+                Jalur solusi
               </p>
               <h2
                 id="pricing-title"
                 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl"
               >
-                Mulai Sesuai Kebutuhan Anda
+                Pilih sesuai kebutuhan Anda
               </h2>
             </div>
             <p className="public-neon-muted max-w-md text-sm leading-6 sm:text-right">
-              Harga ini adalah kisaran awal agar Anda bisa memilih jalur yang
-              sesuai kemampuan sebelum berkonsultasi. Jenis aplikasi tidak
-              otomatis menentukan harga; cakupan pemakaian dan kompleksitas
-              fitur ikut diperhitungkan.
+              RakitApp tidak memaksakan satu harga untuk semua jenis aplikasi.
+              Estimasi awal muncul setelah ide, cakupan pemakaian, dan fitur
+              utama Anda dirakit.
             </p>
           </div>
           <div className="mt-8 grid gap-5 lg:grid-cols-3">
@@ -478,7 +477,7 @@ export function LandingPage() {
               accent="pink"
               eyebrow="Personal"
               title="Aplikasi pribadi"
-              price="Mulai Rp100 ribuan"
+              estimateLabel="Estimasi setelah rancangan"
               description="Cocok untuk mulai membangun kehadiran digital atau alat bantu kerja pribadi."
               items={[
                 "Website portofolio",
@@ -490,7 +489,7 @@ export function LandingPage() {
               accent="cyan"
               eyebrow="Guru & Pembelajaran"
               title="Aplikasi untuk guru"
-              price="Mulai Rp500 ribuan"
+              estimateLabel="Estimasi setelah rancangan"
               description="Cocok untuk membantu kegiatan mengajar, pembelajaran, dan administrasi pribadi guru."
               items={[
                 "Jurnal mengajar",
@@ -502,7 +501,7 @@ export function LandingPage() {
               accent="violet"
               eyebrow="Sekolah & Institusi"
               title="Aplikasi sekolah"
-              price="Mulai Rp1 jutaan"
+              estimateLabel="Estimasi setelah rancangan"
               description="Cocok untuk alur belajar, asesmen, administrasi, dan dashboard sekolah."
               items={[
                 "LMS dan kelas digital",
@@ -718,14 +717,14 @@ function PricingCard({
   accent,
   eyebrow,
   title,
-  price,
+  estimateLabel,
   description,
   items,
 }: {
   accent: "pink" | "cyan" | "violet";
   eyebrow: string;
   title: string;
-  price: string;
+  estimateLabel: string;
   description: string;
   items: string[];
 }) {
@@ -745,7 +744,7 @@ function PricingCard({
       </p>
       <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <h3 className="text-2xl font-semibold text-white">{title}</h3>
-        <p className="text-lg font-semibold">{price}</p>
+        <p className="text-sm font-semibold text-cyan-100">{estimateLabel}</p>
       </div>
       <p className="public-neon-muted mt-3 max-w-xl text-sm leading-6">
         {description}
