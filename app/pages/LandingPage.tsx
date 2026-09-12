@@ -596,7 +596,7 @@ export function LandingPage() {
                       onClick={() => setDemoApp(app)}
                       className="public-neon-button inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold"
                     >
-                      <IconEye className="size-3.5" /> Demo
+                      <IconEye className="size-3.5" /> Contoh
                     </button>
                   </div>
                 </article>

@@ -253,7 +253,7 @@ export function CatalogPage({
                   onClick={() => setDemoApp(app)}
                   className="public-neon-button inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold"
                 >
-                  DEMO <IconSparkles className="size-4" />
+                  CONTOH <IconSparkles className="size-4" />
                 </button>
               </div>
             </article>
