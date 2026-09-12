@@ -489,7 +489,7 @@ export function LandingPage() {
               accent="cyan"
               eyebrow="Guru & Pembelajaran"
               title="Aplikasi untuk guru"
-              estimateLabel="Estimasi setelah rancangan"
+              estimateLabel="Mulai Rp300 ribuan"
               description="Cocok untuk membantu kegiatan mengajar, pembelajaran, dan administrasi pribadi guru."
               items={[
                 "Jurnal mengajar",

@@ -68,10 +68,12 @@ class, several classes, and a school-wide application; the application type
 alone must not force a school-wide price. Add or change a feature there with a
 user-facing label, description, and weight, then update the estimator tests.
 
-Public marketing and the early builder steps do not show nominal prices. The
-builder reveals an indicative range only after the client has selected an idea,
-usage scope, and features. Keep the final-price consultation language visible
-wherever the estimate is shown.
+Public marketing should avoid presenting detailed price ranges before a brief
+exists. A carefully worded starting price may be shown for an affordable
+segment, such as the teacher path, while the builder reveals an indicative
+range only after the client has selected an idea, usage scope, and features.
+Keep the final-price consultation language visible wherever an estimate or
+starting price is shown.
 
 ## Application state
 
