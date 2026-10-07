@@ -17,7 +17,6 @@ import type { ProjectBrief } from "@shared/types";
 import {
   IconArrowLeft,
   IconArrowRight,
-  IconBrandWhatsapp,
   IconCheck,
   IconCircleCheck,
   IconLoader2,
@@ -32,6 +31,10 @@ import {
 } from "react";
 import { Link, useNavigate } from "react-router";
 
+import {
+  WhatsAppConsultationButton,
+  WhatsAppFloatingButton,
+} from "@/components/public/WhatsAppConsultation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -699,7 +702,20 @@ export function BuilderPage() {
             </Button>
           )}
         </footer>
+        <section className="public-glass-panel mt-8 rounded-3xl border-emerald-300/25 p-5 sm:p-6">
+          <p className="text-sm font-semibold text-emerald-200">
+            Ingin berdiskusi dulu?
+          </p>
+          <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="public-neon-muted max-w-xl text-sm leading-6">
+              Jika Anda masih bingung memilih jenis aplikasi atau fitur,
+              ceritakan masalahnya kepada tim RakitApp melalui WhatsApp.
+            </p>
+            <WhatsAppConsultationButton className="shrink-0" />
+          </div>
+        </section>
       </div>
+      <WhatsAppFloatingButton />
     </main>
   );
 }
@@ -760,19 +776,16 @@ function BriefPage({
 }) {
   const [consultationOpen, setConsultationOpen] = useState(false);
   const packageDetails = getPackageDetails(brief.categoryId === "personal-web");
-  const whatsappMessage = encodeURIComponent(
-    [
-      "Halo RakitApp, saya ingin konsultasi rancangan aplikasi.",
-      "Nama sementara: " + formatBriefName(brief.temporaryName),
-      "Jenis aplikasi: " + brief.categoryLabel,
-      "Cakupan: " + brief.scopeLabel,
-      "Estimasi: " +
-        formatCurrency(brief.estimate.priceMin) +
-        " - " +
-        formatCurrency(brief.estimate.priceMax),
-    ].join("\n"),
-  );
-  const whatsappHref = "https://wa.me/?text=" + whatsappMessage;
+  const whatsappMessage = [
+    "Halo RakitApp, saya ingin konsultasi rancangan aplikasi.",
+    "Nama sementara: " + formatBriefName(brief.temporaryName),
+    "Jenis aplikasi: " + brief.categoryLabel,
+    "Cakupan: " + brief.scopeLabel,
+    "Estimasi: " +
+      formatCurrency(brief.estimate.priceMin) +
+      " - " +
+      formatCurrency(brief.estimate.priceMax),
+  ].join("\n");
 
   return (
     <main className="public-neon-page public-neon-grid min-h-screen px-5 py-8 sm:px-8">
@@ -929,15 +942,11 @@ function BriefPage({
             >
               Konsultasikan rancangan
             </Button>
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-300/30 bg-emerald-400/10 px-4 text-sm font-semibold text-emerald-200 transition hover:border-emerald-200/60 hover:bg-emerald-400/20"
-            >
-              <IconBrandWhatsapp className="size-4" />
-              Siapkan pesan WhatsApp
-            </a>
+            <WhatsAppConsultationButton
+              message={whatsappMessage}
+              label="Konsultasi Gratis via WhatsApp"
+              className="mt-3 h-11 w-full rounded-xl"
+            />
             <p className="public-neon-muted mt-2 text-center text-[0.7rem] leading-5">
               Pesan berisi ringkasan rancangan dan estimasi awal.
             </p>
@@ -1044,6 +1053,7 @@ function BriefPage({
           </DialogContent>
         </Dialog>
       </div>
+      <WhatsAppFloatingButton />
     </main>
   );
 }
@@ -1073,6 +1083,7 @@ function SubmittedPage() {
           </CardContent>
         </Card>
       </div>
+      <WhatsAppFloatingButton />
     </main>
   );
 }

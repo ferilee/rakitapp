@@ -18,6 +18,10 @@ import { Link } from "react-router";
 
 // i18n-raw-literal-disable-file: RakitApp MVP copy is intentionally Indonesian.
 import { CatalogDemoDialog } from "@/components/catalog/CatalogDemoDialog";
+import {
+  WhatsAppConsultationButton,
+  WhatsAppFloatingButton,
+} from "@/components/public/WhatsAppConsultation";
 import { APP_TITLE } from "@/lib/app-config";
 
 const accentClasses: Record<
@@ -283,6 +287,22 @@ export function CatalogPage({
           </div>
         </section>
 
+        <section className="public-glass-panel mb-10 flex flex-col items-start justify-between gap-6 rounded-[2rem] border-emerald-300/25 px-6 py-8 sm:flex-row sm:items-center sm:px-10">
+          <div>
+            <p className="text-sm font-medium text-emerald-300">
+              Belum yakin harus mulai dari mana?
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              Ceritakan masalah atau ide Anda.
+            </h2>
+            <p className="public-neon-copy mt-2 max-w-xl text-sm leading-6">
+              Tim RakitApp siap membantu menerjemahkan kebutuhan Anda menjadi
+              solusi yang sederhana dan terjangkau.
+            </p>
+          </div>
+          <WhatsAppConsultationButton className="shrink-0" />
+        </section>
+
         <footer className="public-neon-muted border-t border-slate-700/60 py-5 text-sm">
           Dari masalah → solusi → aplikasi siap digunakan.
         </footer>
@@ -291,6 +311,7 @@ export function CatalogPage({
         app={demoApp}
         onOpenChange={(open) => !open && setDemoApp(null)}
       />
+      <WhatsAppFloatingButton />
     </main>
   );
 }

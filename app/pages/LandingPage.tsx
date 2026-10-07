@@ -22,6 +22,10 @@ import { Link } from "react-router";
 
 import { CatalogDemoDialog } from "@/components/catalog/CatalogDemoDialog";
 import { RecentActivityToast } from "@/components/public/RecentActivityToast";
+import {
+  WhatsAppConsultationButton,
+  WhatsAppFloatingButton,
+} from "@/components/public/WhatsAppConsultation";
 import { APP_TITLE } from "@/lib/app-config";
 
 const examples = [
@@ -243,6 +247,7 @@ export function LandingPage() {
             <p className="public-neon-muted mt-4 text-sm">
               Mulai dari masalah atau ide yang sudah Anda punya.
             </p>
+            <WhatsAppConsultationButton className="mt-4" />
           </div>
 
           <div
@@ -446,6 +451,83 @@ export function LandingPage() {
                 </p>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section
+          className="public-glass-panel mb-20 grid gap-8 rounded-[2rem] border-violet-300/25 p-6 sm:p-8 lg:grid-cols-[1.15fr_.85fr] lg:items-center"
+          aria-labelledby="about-title"
+        >
+          <div>
+            <p className="public-neon-badge inline-flex rounded-full px-3 py-1.5 text-sm font-medium">
+              Tentang RakitApp
+            </p>
+            <h2
+              id="about-title"
+              className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl"
+            >
+              Dibuat oleh Guru, untuk Guru
+            </h2>
+            <div className="public-neon-copy mt-5 space-y-4 text-sm leading-7 sm:text-base">
+              <p>
+                Saya Feri, guru Matematika SMK di Lumajang. Setahun yang lalu
+                saya mulai belajar membuat aplikasi dari nol—malam hari, di sela
+                mengajar—sampai akhirnya bisa membangun aplikasi yang dipakai
+                betulan: sistem kelas online sekolah, bank soal MGMP Matematika
+                se-Kabupaten Lumajang, sampai website sekolah.
+              </p>
+              <p>
+                Dari situlah RakitApp lahir. Saya tahu persis rasanya jadi guru
+                yang punya masalah di kelas tapi bingung harus mulai dari mana,
+                karena saya pernah berada di posisi itu.
+              </p>
+              <p>
+                Di RakitApp, Anda cukup bercerita dengan bahasa sehari-hari.
+                Saya menerjemahkannya menjadi aplikasi: scope dan estimasi awal
+                yang jelas, prototype yang bisa dicoba, lalu siap dikembangkan
+                tanpa perlu paham coding.
+              </p>
+            </div>
+          </div>
+          <div className="rounded-3xl border border-cyan-300/20 bg-slate-950/35 p-5 sm:p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">
+              Karya yang sudah dibuat
+            </p>
+            <div className="mt-4 grid gap-3">
+              {[
+                [
+                  "gemastika.or.id",
+                  "Bank soal MGMP Matematika Kabupaten Lumajang",
+                  "https://gemastika.or.id",
+                ],
+                [
+                  "kelas.smkpasirian-lmj.sch.id",
+                  "Sistem kelas online sekolah",
+                  "https://kelas.smkpasirian-lmj.sch.id",
+                ],
+                [
+                  "ferilee.gurumuda.eu.org",
+                  "Website portofolio pribadi",
+                  "https://ferilee.gurumuda.eu.org",
+                ],
+              ].map(([name, description, href]) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group rounded-2xl border border-slate-700/70 bg-slate-900/55 p-4 transition hover:border-cyan-300/50 hover:bg-cyan-400/10"
+                >
+                  <span className="flex items-center justify-between gap-3 font-semibold text-white">
+                    {name}
+                    <IconArrowRight className="size-4 text-cyan-300 transition-transform group-hover:translate-x-1" />
+                  </span>
+                  <span className="public-neon-muted mt-1 block text-sm leading-6">
+                    {description}
+                  </span>
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -714,6 +796,7 @@ export function LandingPage() {
         onOpenChange={(open) => !open && setDemoApp(null)}
       />
       <RecentActivityToast />
+      <WhatsAppFloatingButton />
     </main>
   );
 }
